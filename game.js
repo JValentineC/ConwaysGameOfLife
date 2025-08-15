@@ -26,7 +26,7 @@ let tickCount = 0;
 
 // Tutorial mode variables
 let isInTutorialMode = true;
-let tutorialTicksRequired = 166;
+let tutorialTicksRequired = 15;
 
 // Game rules - default Conway's Game of Life
 let survivalRules = [2, 3]; // Live cell survives with these neighbor counts
@@ -55,11 +55,20 @@ const spaceshipPatterns = {
     [0, 0, 0, 1, 0, 0, 0],
   ],
   loafer: [
-    // Diagonal spaceship
-    [0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1],
-    [1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    // Complete loafer spaceship pattern
+    [0, 1, 1, 0, 0, 0, 0],
+    [1, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0],
+    [1, 0, 1, 1, 0, 0, 0],
+    [0, 0, 0, 0, 1, 1, 0],
+    [0, 0, 0, 0, 1, 1, 0],
+    [0, 0, 0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 0, 1, 1],
+    [0, 0, 0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 1, 1, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0],
+    [1, 1, 0, 0, 0, 0, 0],
   ],
 };
 
@@ -135,20 +144,32 @@ function disableControls() {
   document.getElementById("start").disabled = true;
   document.getElementById("stop").disabled = true;
   document.getElementById("reset").disabled = true;
-  document.getElementById("add-ship").disabled = true;
   document.getElementById("apply-rules").disabled = true;
   document.getElementById("survival-rules").disabled = true;
   document.getElementById("birth-rules").disabled = true;
+
+  // Disable spaceship clicking during tutorial
+  const shipDisplays = document.querySelectorAll(".ship-display.clickable");
+  shipDisplays.forEach((display) => {
+    display.style.pointerEvents = "none";
+    display.style.opacity = "0.5";
+  });
 }
 
 function enableControls() {
   document.getElementById("start").disabled = false;
   document.getElementById("stop").disabled = false;
   document.getElementById("reset").disabled = false;
-  document.getElementById("add-ship").disabled = false;
   document.getElementById("apply-rules").disabled = false;
   document.getElementById("survival-rules").disabled = false;
   document.getElementById("birth-rules").disabled = false;
+
+  // Enable spaceship clicking after tutorial
+  const shipDisplays = document.querySelectorAll(".ship-display.clickable");
+  shipDisplays.forEach((display) => {
+    display.style.pointerEvents = "auto";
+    display.style.opacity = "1";
+  });
 }
 
 function updateRulesDisplay() {
@@ -240,7 +261,7 @@ function reset() {
   draw(state); // Redraw the grid
 }
 
-function addRandomShip() {
+function addSpecificShip(shipType) {
   if (isInTutorialMode) return; // Don't allow during tutorial
 
   // Clear the board first - set all cells to dead
@@ -250,13 +271,14 @@ function addRandomShip() {
     }
   }
 
-  // Get list of available patterns
-  const patternNames = Object.keys(spaceshipPatterns);
-  const randomPattern =
-    patternNames[Math.floor(Math.random() * patternNames.length)];
-  const pattern = spaceshipPatterns[randomPattern];
+  // Get the specific pattern
+  const pattern = spaceshipPatterns[shipType];
+  if (!pattern) {
+    console.error(`Unknown ship type: ${shipType}`);
+    return;
+  }
 
-  // Find a random position that fits the pattern
+  // Calculate safe placement bounds to ensure ship stays within board
   const maxRow = numRows - pattern.length;
   const maxCol = numCols - pattern[0].length;
 
@@ -265,8 +287,9 @@ function addRandomShip() {
     return;
   }
 
-  const startRow = Math.floor(Math.random() * maxRow);
-  const startCol = Math.floor(Math.random() * maxCol);
+  // Place ship in center or random safe position
+  const startRow = Math.max(0, Math.floor((numRows - pattern.length) / 2));
+  const startCol = Math.max(0, Math.floor((numCols - pattern[0].length) / 2));
 
   // Place the pattern on the grid
   for (let i = 0; i < pattern.length; i++) {
@@ -278,9 +301,18 @@ function addRandomShip() {
   }
 
   draw(state); // Redraw to show the new pattern
-  document.getElementById(
-    "ship-added-message"
-  ).textContent = `Added ${randomPattern} at position (${startRow}, ${startCol})`;
+
+  // Update modal message with ship type
+  const shipNames = {
+    glider: "Glider",
+    lwss: "Lightweight Spaceship (LWSS)",
+    mwss: "Middleweight Spaceship (MWSS)",
+    loafer: "Loafer",
+  };
+
+  document.getElementById("ship-added-message").textContent = `Added ${
+    shipNames[shipType] || shipType
+  } at position (${startRow}, ${startCol})`;
   document.getElementById("ship_added_modal").showModal();
 }
 
@@ -288,8 +320,20 @@ function addRandomShip() {
 document.getElementById("start").onclick = start;
 document.getElementById("stop").onclick = stop;
 document.getElementById("reset").onclick = reset;
-document.getElementById("add-ship").onclick = addRandomShip;
 document.getElementById("apply-rules").onclick = applyCustomRules;
+
+// Add event listeners for clickable spaceship patterns
+document.addEventListener("DOMContentLoaded", function () {
+  const shipDisplays = document.querySelectorAll(".ship-display.clickable");
+  shipDisplays.forEach((display) => {
+    display.addEventListener("click", function () {
+      if (isInTutorialMode) return; // Don't allow during tutorial
+
+      const shipType = this.getAttribute("data-ship");
+      addSpecificShip(shipType);
+    });
+  });
+});
 
 // Initialize - start tutorial automatically
 draw(state);

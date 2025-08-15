@@ -1,16 +1,26 @@
+:root {
+  --cell-size: 20px;
+  --cell-gap: 2px;
+}
+
 #game {
   display: grid;
-  grid-template-columns: repeat(17, 20px); /* Match cell width */
-  grid-gap: 2px;
+  /* grid-template-columns will be set dynamically by JavaScript */
+  grid-gap: var(--cell-gap);
   margin-bottom: 10px;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  overflow: auto;
 }
 .cell {
-  width: 20px;
-  height: 20px;
+  width: var(--cell-size);
+  height: var(--cell-size);
   background: #5b0202;
   border: 1px solid #2c0202;
   box-sizing: border-box; /* Ensures border is included in size */
 }
+
 .cell.alive {
   background: #efe9e9;
 }
@@ -54,11 +64,14 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-width: 0; /* Allow shrinking */
 }
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 100%;
 }
 
 .game-rules {
@@ -283,6 +296,8 @@ body {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 200px; /* Fixed width for all cards */
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .ship-display.clickable {
@@ -352,4 +367,211 @@ body {
   font-size: 0.9rem;
   color: #ccc;
   line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --cell-size: 16px;
+    --cell-gap: 1px;
+  }
+  .main-layout {
+    gap: 18px;
+  }
+  .game-rules,
+  .game-history {
+    max-width: 320px;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Phone layout — stack columns and shrink content */
+  :root {
+    --cell-size: 14px;
+    --cell-gap: 1px;
+  }
+
+  .main-layout {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+    gap: 16px;
+  }
+
+  .game-center,
+  .game-rules,
+  .game-history {
+    width: 100%;
+    max-width: none;
+  }
+
+  /* Make the grid container responsive */
+  #game {
+    justify-content: center;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 6px;
+    max-width: 100vw;
+  }
+
+  /* Slightly smaller pattern previews */
+  .ship-pattern .cell {
+    width: 10px;
+    height: 10px;
+  }
+
+  .ship-pattern.glider-pattern {
+    grid-template-columns: repeat(3, 10px);
+  }
+  .ship-pattern.lwss-pattern {
+    grid-template-columns: repeat(5, 10px);
+  }
+  .ship-pattern.mwss-pattern {
+    grid-template-columns: repeat(6, 10px);
+  }
+  .ship-pattern.loafer-pattern {
+    grid-template-columns: repeat(7, 10px);
+  }
+
+  /* Stack spaceship gallery more compactly */
+  .spaceship-patterns {
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  /* Make spaceship cards smaller on mobile */
+  .ship-display {
+    width: 160px; /* Smaller width for mobile */
+    padding: 12px;
+  }
+
+  /* Make controls easier to tap */
+  button,
+  .btn {
+    padding: 10px 14px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+
+  /* Titles and modal sizing */
+  .title {
+    font-size: 1.6em;
+    height: 64px;
+  }
+  .modal-box {
+    width: 92%;
+    max-width: none;
+    padding: 16px;
+  }
+  .click-instruction {
+    font-size: 0.9rem;
+  }
+}
+
+/* Very narrow phones: make sure things remain usable */
+@media (max-width: 480px) {
+  :root {
+    --cell-size: 12px;
+    --cell-gap: 1px;
+  }
+  .title {
+    font-size: 1.4rem;
+    height: 56px;
+  }
+  button,
+  .btn {
+    font-size: 15px;
+    padding: 9px 12px;
+  }
+
+  /* Even smaller spaceship cards for small phones */
+  .ship-display {
+    width: 140px;
+    padding: 10px;
+  }
+}
+
+/* Extra narrow phones */
+@media (max-width: 380px) {
+  :root {
+    --cell-size: 10px;
+    --cell-gap: 1px;
+  }
+  .title {
+    font-size: 1.25rem;
+    height: 56px;
+  }
+  button,
+  .btn {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+
+  /* Smallest spaceship cards for tiny screens */
+  .ship-display {
+    width: 120px;
+    padding: 8px;
+  }
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #ffd700;
+  border: 1px solid #ffd700;
+}
+
+.btn-ghost:hover {
+  background: #ffd700;
+  color: black;
+}
+
+.btn-ghost-lg {
+  padding: 10px 20px; /* match #apply-rules */
+  font-weight: bold;
+  border-radius: 4px;
+  background: transparent;
+  color: #ffd700;
+  border: 2px solid #ffd700; /* slightly thicker so it reads at larger size */
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, transform 0.08s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 1rem;
+}
+
+.btn-ghost-lg:hover {
+  background: #ffd700;
+  color: black;
+  transform: translateY(-1px);
+}
+
+/* Ensure small-variant still works if needed */
+.btn-ghost-lg.btn-sm {
+  padding: 8px 14px;
+  font-size: 0.95rem;
+}
+
+/* Optional: target common IDs if your HTML uses them (keeps markup changes optional) */
+#start,
+#stop,
+#reset {
+  /* only apply if these are plain buttons without classes */
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 4px;
+  background: transparent;
+  color: #ffd700;
+  border: 2px solid #ffd700;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, transform 0.08s;
+}
+
+#start:hover,
+#stop:hover,
+#reset:hover {
+  background: #ffd700;
+  color: black;
+  transform: translateY(-1px);
 }

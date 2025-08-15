@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Game of Life</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+  <body>
+    <h1 class="title">Game of Life</h1>
+    <div class="main-layout">
+      <div class="game-rules">
+        <h2>Rules</h2>
+        <div class="rules-customization">
+          <h3>Customize Rules</h3>
+          <div class="rule-input">
+            <label for="survival-rules"
+              >Survival (live cell stays alive with):</label
+            >
+            <input
+              type="text"
+              id="survival-rules"
+              value="2,3"
+              placeholder="e.g., 2,3"
+            />
+            <small>Comma-separated neighbor counts</small>
+          </div>
+          <div class="rule-input">
+            <label for="birth-rules"
+              >Birth (dead cell becomes alive with):</label
+            >
+            <input
+              type="text"
+              id="birth-rules"
+              value="3"
+              placeholder="e.g., 3"
+            />
+            <small>Comma-separated neighbor counts</small>
+          </div>
+          <button id="apply-rules">Apply Rules</button>
+        </div>
+        <h3>Current Rules</h3>
+        <ul id="current-rules">
+          <li
+            >Any live cell with fewer than two live neighbours dies
+            (underpopulation).</li
+          >
+          <li
+            >Any live cell with two or three live neighbours lives on to the
+            next generation.</li
+          >
+          <li
+            >Any live cell with more than three live neighbours dies
+            (overpopulation).</li
+          >
+          <li
+            >Any dead cell with exactly three live neighbours becomes a live
+            cell (reproduction).</li
+          >
+        </ul>
+      </div>
+      <div class="game-center">
+        <span id="tick-counter">Tick: 0</span>
+        <div class="container">
+          <div id="game"></div>
+          <div>
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+            <button id="reset">Reset</button>
+            <button id="add-ship">Add Ship</button>
+          </div>
+        </div>
+      </div>
+      <div class="game-history">
+        <h2>History</h2>
+        <p>
+          The Game of Life, devised by mathematician John Horton Conway in 1970,
+          is a cellular automaton that simulates the evolution of simple
+          organisms on a grid. Each cell can be alive or dead, and its fate is
+          determined by the state of its neighbors. The game became famous for
+          demonstrating how complex patterns and behaviors can emerge from
+          simple rules, and it has inspired research in mathematics, computer
+          science, and artificial life.
+        </p>
+      </div>
+    </div>
+
+    <!-- Modal dialogs -->
+    <dialog id="welcome_modal" class="modal">
+      <div class="modal-box">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >✕</button
+          >
+        </form>
+        <h3 class="text-lg font-bold">Welcome to Conway's Game of Life!</h3>
+        <p class="py-4"
+          >Watch the initial pattern evolve for 166 ticks to learn how the game
+          works. The simulation will start automatically.</p
+        >
+      </div>
+    </dialog>
+
+    <dialog id="tutorial_complete_modal" class="modal">
+      <div class="modal-box">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >✕</button
+          >
+        </form>
+        <h3 class="text-lg font-bold">Tutorial Complete!</h3>
+        <p class="py-4"
+          >You can now interact with all controls. Welcome to Conway's Game of
+          Life!</p
+        >
+      </div>
+    </dialog>
+
+    <dialog id="pattern_stable_modal" class="modal">
+      <div class="modal-box">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >✕</button
+          >
+        </form>
+        <h3 class="text-lg font-bold">Pattern Stabilized</h3>
+        <p class="py-4">Pattern has stabilized or is oscillating.</p>
+      </div>
+    </dialog>
+
+    <dialog id="rules_updated_modal" class="modal">
+      <div class="modal-box">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >✕</button
+          >
+        </form>
+        <h3 class="text-lg font-bold">Rules Updated</h3>
+        <p class="py-4">Rules updated successfully!</p>
+      </div>
+    </dialog>
+
+    <dialog id="invalid_rules_modal" class="modal">
+      <div class="modal-box">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >✕</button
+          >
+        </form>
+        <h3 class="text-lg font-bold">Invalid Rules</h3>
+        <p class="py-4"
+          >Invalid rule format. Please use comma-separated numbers (0-8).</p
+        >
+      </div>
+    </dialog>
+
+    <dialog id="grid_too_small_modal" class="modal">
+      <div class="modal-box">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >✕</button
+          >
+        </form>
+        <h3 class="text-lg font-bold">Grid Too Small</h3>
+        <p class="py-4">Grid too small for spaceship patterns!</p>
+      </div>
+    </dialog>
+
+    <dialog id="ship_added_modal" class="modal">
+      <div class="modal-box">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >✕</button
+          >
+        </form>
+        <h3 class="text-lg font-bold">Spaceship Added</h3>
+        <p class="py-4" id="ship-added-message">Added spaceship!</p>
+      </div>
+    </dialog>
+
+    <script src="game.js"></script>
+  </body>
+</html>

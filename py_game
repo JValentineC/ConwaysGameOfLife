@@ -1,0 +1,68 @@
+import os
+from time import sleep
+
+
+def tick(state, alive):
+    num_rows = len(state)
+    num_cols = len(state[0])
+    next_alive = set()
+    candidates = alive | set(neighbor for cell in alive for neighbor in find_neighbors(cell, num_rows, num_cols))
+    for cell in candidates:
+        i, j = cell
+        neighbors = find_neighbors(cell, num_rows, num_cols)
+        alives = sum((ni, nj) in alive for ni, nj in neighbors)
+        if (i, j) in alive:
+            if alives == 2 or alives == 3:
+                next_alive.add(cell)
+        else:
+            if alives == 3:
+                next_alive.add(cell)
+    new_state = [[0]*num_cols for _ in range(num_rows)]
+    for i, j in next_alive:
+        new_state[i][j] = 1
+    return new_state, next_alive
+
+
+
+def find_neighbors(coord, num_rows, num_cols):
+    dirs = [[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]]
+    res = []
+    for dir in dirs:
+        possible = ((coord[0]+dir[0]) % num_rows, (coord[1]+dir[1]) % num_cols)
+        res.append(possible)
+    return res
+
+
+
+def print_state(state):
+    for i in range(len(state)):
+        row = ""
+        for j in range(len(state[0])):
+            if state[i][j] == 1:
+                row += "X"
+            else:
+                row += "-"
+        print(row)
+
+if __name__ == "__main__":
+    state = [[0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,1,1,0,0],
+             [0,0,1,0,0,0,0,0,0],
+             [0,0,1,0,0,0,0,0,0],
+             [0,0,1,1,1,0,0,0,0],
+             [0,1,0,1,0,1,0,0,0],
+             [0,0,1,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0]]
+    alive = {(i, j) for i, row in enumerate(state) for j, cell in enumerate(row) if cell == 1}
+    print_state(state)
+    for i in range(500):
+        sleep(0.5)
+        os.system('cls' if os.name == 'nt' else 'clear')
+        prev_state = [row[:] for row in state]
+        state, alive = tick(state, alive)
+        print(f"Tick: {i+1}")
+        print_state(state)
+        if state == prev_state:
+            print("Pattern has stabilized or is oscillating.")
+            break

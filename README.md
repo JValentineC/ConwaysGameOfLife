@@ -2,7 +2,7 @@
 
 A browser-based implementation of Conway's Game of Life with customizable rules, interactive controls, spaceship patterns, guided tutorial mode, and modern UI components.
 
-![Game of Life Demo](https://jvalentinec.github.io/ConwaysGameOfLife/)
+Game of Life Demo: https://jvalentinec.github.io/ConwaysGameOfLife/
 
 ## 🚀 Live Demo
 

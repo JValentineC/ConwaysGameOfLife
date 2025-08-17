@@ -1,7 +1,6 @@
 :root {
   --cell-size: 12px;
   --cell-gap: 1px;
-}
 
 #game {
   display: grid;

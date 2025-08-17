@@ -13,6 +13,42 @@
   </head>
   <body>
     <h1 class="title">Game of Life</h1>
+    
+    <!-- Mobile Controls -->
+    <div class="mobile-controls">
+      <div class="mobile-game-controls">
+        <button id="mobile-start">Start</button>
+        <button id="mobile-stop">Stop</button>
+        <button id="mobile-reset">Reset</button>
+      </div>
+      
+      <div class="mobile-pattern-selector">
+        <label for="pattern-dropdown">Add Pattern:</label>
+        <select id="pattern-dropdown">
+          <option value="">Select a pattern...</option>
+        </select>
+        <button id="view-pattern" disabled>View Pattern</button>
+      </div>
+      
+      <div class="mobile-rules-toggle">
+        <button id="toggle-rules">Rules & Settings</button>
+      </div>
+    </div>
+
+    <!-- Pattern Preview Modal for Mobile -->
+    <div id="pattern-preview-modal" class="pattern-modal">
+      <div class="pattern-modal-content">
+        <span class="pattern-modal-close">&times;</span>
+        <h3 id="pattern-modal-title">Pattern Preview</h3>
+        <div id="pattern-modal-preview"></div>
+        <p id="pattern-modal-description"></p>
+        <div class="pattern-modal-actions">
+          <button id="place-pattern" disabled>Place Pattern</button>
+          <button id="cancel-pattern">Cancel</button>
+        </div>
+      </div>
+    </div>
+    
     <div class="main-layout">
       <div class="game-rules">
         <h2>Rules</h2>
@@ -93,6 +129,12 @@
         
       </div>
       <div class="spaceship-patterns">
+        
+        <!-- Spaceships Category -->
+        <div class="pattern-category-header spaceships-header">
+          <h3>🚀 Spaceships</h3>
+          <p>Moving patterns that travel across the grid</p>
+        </div>
        
           <div class="ship-display clickable" data-ship="glider">
             <h4>Glider</h4>
@@ -109,16 +151,10 @@
           <div class="ship-display clickable" data-ship="lwss">
             <h4>Lightweight Spaceship (LWSS)</h4>
             <div class="ship-pattern lwss-pattern">
-              <div class="cell alive"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell alive"></div>
-              <div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell alive"></div> <div class="cell alive"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell alive"></div>
-              <div class="cell"></div><div class="cell alive"></div
-              ><div class="cell alive"></div><div class="cell alive"></div
-              ><div class="cell alive"></div>
+              <div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div>
             </div>
             <p>Travels horizontally, period 4.</p>
           </div>
@@ -126,74 +162,93 @@
           <div class="ship-display clickable" data-ship="mwss">
             <h4>Middleweight Spaceship (MWSS)</h4>
             <div class="ship-pattern mwss-pattern">
-              <div class="cell"></div><div class="cell"></div
-              ><div class="cell alive"></div><div class="cell"></div
-              ><div class="cell"></div> <div class="cell alive"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell alive"></div>
-              <div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell alive"></div>
-              <div class="cell alive"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell alive"></div> <div class="cell"></div
-              ><div class="cell alive"></div><div class="cell alive"></div
-              ><div class="cell alive"></div><div class="cell alive"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div>
             </div>
             <p>Larger horizontal traveler, period 4.</p>
           </div>
 
-          <div class="ship-display clickable" data-ship="loafer">
-            <h4>Loafer</h4>
-            <div class="ship-pattern loafer-pattern">
-              <div class="cell"></div><div class="cell alive"></div
-              ><div class="cell alive"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div> <div class="cell alive"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell alive"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div>
-              <div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell alive"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div> <div class="cell alive"></div
-              ><div class="cell"></div><div class="cell alive"></div
-              ><div class="cell alive"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div>
-              <div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell alive"></div><div class="cell alive"></div
-              ><div class="cell"></div> <div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell alive"></div
-              ><div class="cell alive"></div><div class="cell"></div>
-              <div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell alive"></div> <div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell alive"></div><div class="cell alive"></div>
-              <div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell alive"></div
-              ><div class="cell"></div> <div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell alive"></div
-              ><div class="cell"></div><div class="cell"></div>
-              <div class="cell"></div><div class="cell"></div
-              ><div class="cell alive"></div><div class="cell alive"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div> <div class="cell"></div
-              ><div class="cell alive"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div>
-              <div class="cell alive"></div><div class="cell alive"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div><div class="cell"></div
-              ><div class="cell"></div>
+          <div class="ship-display clickable" data-ship="hwss">
+            <h4>Heavyweight Spaceship (HWSS)</h4>
+            <div class="ship-pattern hwss-pattern">
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div>
             </div>
-            <p>Complex diagonal spaceship, period 7.</p>
+            <p>Heavyweight horizontal traveler, period 4.</p>
+          </div>
+
+        <!-- Oscillators Category -->
+        <div class="pattern-category-header oscillators-header">
+          <h3>🔄 Oscillators</h3>
+          <p>Patterns that repeat their states in cycles</p>
+        </div>
+
+          <div class="ship-display clickable" data-ship="pulsar">
+            <h4>Pulsar</h4>
+            <div class="ship-pattern pulsar-pattern">
+              <div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div>
+            </div>
+            <p>Period 3 oscillator, very stable.</p>
+          </div>
+
+          <div class="ship-display clickable" data-ship="beacon">
+            <h4>Beacon</h4>
+            <div class="ship-pattern beacon-pattern">
+              <div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div>
+            </div>
+            <p>Period 2 oscillator.</p>
+          </div>
+
+        <!-- Generators Category -->
+        <div class="pattern-category-header generators-header">
+          <h3>⚡ Generators</h3>
+          <p>Patterns that create other patterns</p>
+        </div>
+
+          <div class="ship-display clickable" data-ship="glidergun">
+            <h4>Glider Gun</h4>
+            <div class="ship-pattern glidergun-pattern">
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            </div>
+            <p>Produces gliders infinitely (large pattern).</p>
+          </div>
+
+        <!-- Methuselahs Category -->
+        <div class="pattern-category-header methuselahs-header">
+          <h3>🧬 Methuselahs</h3>
+          <p>Long-lived patterns with interesting evolution</p>
+        </div>
+
+          <div class="ship-display clickable" data-ship="acorn">
+            <h4>Acorn</h4>
+            <div class="ship-pattern acorn-pattern">
+              <div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div>
+            </div>
+            <p>Takes 5206 generations to stabilize!</p>
           </div>
           </div>
     </div>

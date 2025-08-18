@@ -267,6 +267,21 @@ const spaceshipPatterns = {
     [0, 0, 1, 1, 1, 0, 0],
     [0, 0, 0, 1, 0, 0, 0],
   ],
+  pufferfish: [
+    // Pufferfish spaceship - leaves a trail of debris behind
+    [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0],
+    [0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0],
+    [0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0],
+    [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1],
+    [1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1],
+    [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+  ],
 };
 
 function findNeighbors(i, j) {
@@ -600,6 +615,11 @@ function start() {
     if (isInTutorialMode && tickCount >= tutorialTicksRequired) {
       stop();
       isInTutorialMode = false;
+
+      // Use the existing reset function to clear the board
+      // Since isInTutorialMode is now false, reset() will work
+      reset();
+
       enableControls();
       document.getElementById("tutorial_complete_modal").showModal();
       return;
@@ -734,16 +754,19 @@ function showPatternPreview(patternName) {
     lwss: "Lightweight Spaceship - travels horizontally, period 4.",
     mwss: "Middleweight Spaceship - larger horizontal traveler, period 4.",
     hwss: "Heavyweight Spaceship - heavyweight horizontal traveler, period 4.",
+    blinker: "Period 2 oscillator - simplest oscillator.",
+    toad: "Period 2 oscillator.",
+    beacon: "Period 2 oscillator.",
     pulsar: "Period 3 oscillator, very stable.",
+    block: "Simplest still life pattern.",
+    beehive: "Common still life pattern.",
+    loaf: "Still life with an asymmetric shape.",
+    boat: "Small still life pattern.",
     glidergun: "Produces gliders infinitely (large pattern).",
     acorn: "Takes 5206 generations to stabilize!",
-    beacon: "Period 2 oscillator.",
-    block: "Still life pattern.",
-    beehive: "Still life pattern.",
-    loaf: "Still life pattern.",
-    boat: "Still life pattern.",
     diehard: "Dies completely after 130 generations.",
-    copperhead: "Copperhead spaceship - very stable diagonal movement.",
+    copperhead: "Stable diagonal-moving spaceship.",
+    pufferfish: "Orthogonal spaceship that leaves a trail of debris behind.",
   };
 
   description.textContent =

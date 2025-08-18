@@ -675,7 +675,7 @@
   }
 
   .copperhead-pattern {
-    grid-template-columns: repeat(7, 12px);
+    grid-template-columns: repeat(10, 12px);
   }
 
   .pufferfish-pattern {
@@ -685,6 +685,19 @@
   .pufferfish-pattern .cell {
     width: 10px;
     height: 10px;
+  }
+
+  .weekender-pattern {
+    grid-template-columns: repeat(16, 9px);
+  }
+
+  .weekender-pattern .cell {
+    width: 9px;
+    height: 9px;
+  }
+
+  .galaxy-pattern {
+    grid-template-columns: repeat(9, 12px);
   }
 
   /* Category Headers */
@@ -1071,4 +1084,220 @@
   background: #ffd700;
   color: black;
   transform: translateY(-1px);
+}
+
+/* Fullscreen mode styles */
+#fullscreen-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  z-index: 1000;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#fullscreen-controls {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#fullscreen-controls button {
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 4px;
+  background: transparent;
+  color: #ffd700;
+  border: 2px solid #ffd700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+#fullscreen-controls button:hover {
+  background: #ffd700;
+  color: black;
+  transform: translateY(-1px);
+}
+
+#exit-fullscreen {
+  background: #ff6b6b !important;
+  border-color: #ff6b6b !important;
+  color: white !important;
+}
+
+#exit-fullscreen:hover {
+  background: #ff5252 !important;
+  border-color: #ff5252 !important;
+  color: white !important;
+}
+
+#fullscreen-tick-counter {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-left: 20px;
+}
+
+#fullscreen-game {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: auto;
+}
+
+/* Fullscreen pattern selector */
+#fullscreen-patterns {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 215, 0, 0.2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.fullscreen-pattern-category {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pattern-category-title {
+  color: #ffd700;
+  font-size: 0.85rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.fullscreen-pattern-btn {
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-radius: 3px;
+  background: transparent;
+  color: #ddd;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.fullscreen-pattern-btn:hover {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: #ffd700;
+  color: #ffd700;
+  transform: translateY(-1px);
+}
+
+.fullscreen-pattern-btn:active {
+  transform: translateY(0);
+}
+
+/* Override cell size in fullscreen mode */
+#fullscreen-container #game {
+  margin-bottom: 0;
+}
+
+#fullscreen-container .cell {
+  width: 8px;
+  height: 8px;
+} /* Mobile fullscreen adjustments */
+@media (max-width: 768px) {
+  #fullscreen-controls {
+    flex-wrap: wrap;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  #fullscreen-controls button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+
+  #fullscreen-tick-counter {
+    margin-left: 0;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+  }
+
+  #fullscreen-container .cell {
+    width: 6px;
+    height: 6px;
+  }
+
+  /* Mobile pattern selector adjustments */
+  #fullscreen-patterns {
+    padding: 8px 15px;
+    gap: 10px;
+    max-height: 100px;
+  }
+
+  .fullscreen-pattern-category {
+    gap: 6px;
+  }
+
+  .pattern-category-title {
+    font-size: 0.8rem;
+  }
+
+  .fullscreen-pattern-btn {
+    padding: 3px 6px;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #fullscreen-controls button {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  #fullscreen-container .cell {
+    width: 4px;
+    height: 4px;
+  }
+
+  /* Very small mobile pattern selector */
+  #fullscreen-patterns {
+    padding: 6px 10px;
+    gap: 8px;
+    max-height: 80px;
+    flex-direction: column;
+  }
+
+  .fullscreen-pattern-category {
+    gap: 4px;
+    justify-content: center;
+  }
+
+  .pattern-category-title {
+    font-size: 0.75rem;
+    margin-right: 5px;
+  }
+
+  .fullscreen-pattern-btn {
+    padding: 2px 5px;
+    font-size: 0.65rem;
+  }
 }

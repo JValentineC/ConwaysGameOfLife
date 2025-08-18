@@ -20,6 +20,7 @@
         <button id="mobile-start">Start</button>
         <button id="mobile-stop">Stop</button>
         <button id="mobile-reset">Reset</button>
+        <button id="mobile-fullscreen">Fullscreen</button>
       </div>
       
       <div class="mobile-pattern-selector">
@@ -108,6 +109,7 @@
             <button id="start">Start</button>
             <button id="stop">Stop</button>
             <button id="reset">Reset</button>
+            <button id="toggle-fullscreen">Fullscreen</button>
           </div>
         </div>
       </div>
@@ -186,12 +188,19 @@
           <div class="ship-display clickable" data-ship="copperhead">
             <h4>Copperhead</h4>
             <div class="ship-pattern copperhead-pattern">
-              <div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div>
-              <div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div>
-              <div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div>
-              <div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div>
-              <div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div>
-              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
             </div>
             <p>Stable diagonal-moving spaceship.</p>
           </div>
@@ -213,6 +222,24 @@
               <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
             </div>
             <p>Orthogonal spaceship that leaves a trail of debris behind.</p>
+          </div>
+
+          <div class="ship-display clickable" data-ship="Weekender">
+            <h4>Weekender</h4>
+            <div class="ship-pattern weekender-pattern">
+              <div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div>
+              <div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div>
+              <div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            </div>
+            <p>Orthogonal spaceship, travels horizontally every 5 generations.</p>
           </div>
 
         <!-- Oscillators Category -->
@@ -267,6 +294,22 @@
               <div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div>
             </div>
             <p>Period 2 oscillator.</p>
+          </div>
+
+          <div class="ship-display clickable" data-ship="Galaxy">
+            <h4>Galaxy</h4>
+            <div class="ship-pattern galaxy-pattern">
+              <div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div>
+              <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              <div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div>
+              <div class="cell alive"></div><div class="cell alive"></div><div class="cell"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div><div class="cell alive"></div>
+            </div>
+            <p>Period 8 oscillator with rotating symmetric pattern.</p>
           </div>
 
         <!-- Still Lifes Category -->

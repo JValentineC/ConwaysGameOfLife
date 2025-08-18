@@ -4,6 +4,11 @@ let numCols = 40;
 
 // Function to calculate optimal grid size based on screen width
 function calculateGridSize() {
+  if (isFullscreenMode) {
+    calculateFullscreenGridSize();
+    return;
+  }
+
   const cellSize = parseInt(
     getComputedStyle(document.documentElement).getPropertyValue("--cell-size")
   );
@@ -46,6 +51,28 @@ function calculateGridSize() {
 
   console.log(
     `Grid size calculated: ${numRows}x${numCols} (available width: ${availableWidth}px, screen width: ${window.innerWidth}px)`
+  );
+}
+
+// Function to calculate optimal fullscreen grid size
+function calculateFullscreenGridSize() {
+  const cellSize = 8; // Smaller cells for fullscreen
+  const cellGap = 1;
+
+  // Calculate available space (leaving room for controls)
+  const availableWidth = window.innerWidth - 40; // 20px margin on each side
+  const availableHeight = window.innerHeight - 120; // Room for controls and margins
+
+  // Calculate maximum columns and rows that fit
+  const maxCols = Math.floor(availableWidth / (cellSize + cellGap));
+  const maxRows = Math.floor(availableHeight / (cellSize + cellGap));
+
+  // Set reasonable bounds for fullscreen
+  numCols = Math.min(Math.max(maxCols, 60), 150); // Between 60-150 columns
+  numRows = Math.min(Math.max(maxRows, 40), 100); // Between 40-100 rows
+
+  console.log(
+    `Fullscreen grid size calculated: ${numRows}x${numCols} (available: ${availableWidth}x${availableHeight}px)`
   );
 }
 
@@ -107,6 +134,11 @@ let tutorialTicksRequired = 15; // Will be adjusted based on grid size
 let isInPlacementMode = false;
 let selectedPattern = null;
 let selectedPatternType = null;
+
+// Fullscreen mode variables
+let isFullscreenMode = false;
+let normalGridSize = { rows: 40, cols: 40 };
+let fullscreenGridSize = { rows: 60, cols: 80 };
 
 // Game rules - default Conway's Game of Life
 let survivalRules = [2, 3]; // Live cell survives with these neighbor counts
@@ -260,12 +292,46 @@ const spaceshipPatterns = {
   ],
   copperhead: [
     // Copperhead spaceship - very stable diagonal movement
-    [0, 1, 1, 0, 1, 1, 0],
-    [1, 0, 1, 1, 1, 0, 1],
-    [0, 1, 1, 0, 1, 1, 0],
-    [0, 0, 1, 0, 1, 0, 0],
-    [0, 0, 1, 1, 1, 0, 0],
-    [0, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
+    [1, 1, 0, 1, 0, 0, 1, 0, 1, 1],
+    [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+  ],
+  Galaxy: [
+    // Galaxy  - oscillator
+    [1, 1, 1, 1, 1, 1, 0, 1, 1],
+    [1, 1, 1, 1, 1, 1, 0, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 1, 1],
+    [1, 1, 0, 0, 0, 0, 0, 1, 1],
+    [1, 1, 0, 0, 0, 0, 0, 1, 1],
+    [1, 1, 0, 0, 0, 0, 0, 1, 1],
+    [1, 1, 0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 0, 1, 1, 1, 1, 1, 1],
+    [1, 1, 0, 1, 1, 1, 1, 1, 1],
+  ],
+
+  Weekender: [
+    // Weekender  - orthogonal spaceship
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+    [0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0],
   ],
   pufferfish: [
     // Pufferfish spaceship - leaves a trail of debris behind
@@ -490,9 +556,14 @@ function updateTickCounter() {
   const tutorialText = isInTutorialMode
     ? ` (Tutorial: ${ticksRemaining} ticks remaining)`
     : "";
-  document.getElementById(
-    "tick-counter"
-  ).textContent = `Tick: ${tickCount}${tutorialText}`;
+  const counterText = `Tick: ${tickCount}${tutorialText}`;
+
+  // Update both normal and fullscreen tick counters
+  const normalCounter = document.getElementById("tick-counter");
+  const fullscreenCounter = document.getElementById("fullscreen-tick-counter");
+
+  if (normalCounter) normalCounter.textContent = counterText;
+  if (fullscreenCounter) fullscreenCounter.textContent = counterText;
 }
 
 function disableControls() {
@@ -503,10 +574,16 @@ function disableControls() {
   document.getElementById("survival-rules").disabled = true;
   document.getElementById("birth-rules").disabled = true;
 
+  const fullscreenBtn = document.getElementById("toggle-fullscreen");
+  if (fullscreenBtn) fullscreenBtn.disabled = true;
+
   // Disable mobile controls during tutorial
   document.getElementById("mobile-start").disabled = true;
   document.getElementById("mobile-stop").disabled = true;
   document.getElementById("mobile-reset").disabled = true;
+
+  const mobileFullscreenBtn = document.getElementById("mobile-fullscreen");
+  if (mobileFullscreenBtn) mobileFullscreenBtn.disabled = true;
 
   // Disable spaceship clicking during tutorial
   const shipDisplays = document.querySelectorAll(".ship-display.clickable");
@@ -532,10 +609,16 @@ function enableControls() {
   document.getElementById("survival-rules").disabled = false;
   document.getElementById("birth-rules").disabled = false;
 
+  const fullscreenBtn = document.getElementById("toggle-fullscreen");
+  if (fullscreenBtn) fullscreenBtn.disabled = false;
+
   // Enable mobile controls
   document.getElementById("mobile-start").disabled = false;
   document.getElementById("mobile-stop").disabled = false;
   document.getElementById("mobile-reset").disabled = false;
+
+  const mobileFullscreenBtn = document.getElementById("mobile-fullscreen");
+  if (mobileFullscreenBtn) mobileFullscreenBtn.disabled = false;
 
   // Enable spaceship clicking after tutorial
   const shipDisplays = document.querySelectorAll(".ship-display.clickable");
@@ -657,6 +740,165 @@ function reset() {
   draw(state); // Redraw the grid
 }
 
+// Fullscreen mode functions
+function toggleFullscreen() {
+  if (isFullscreenMode) {
+    exitFullscreen();
+  } else {
+    enterFullscreen();
+  }
+}
+
+function enterFullscreen() {
+  if (isInTutorialMode) return; // Don't allow during tutorial
+
+  // Save current state
+  normalGridSize = { rows: numRows, cols: numCols };
+
+  isFullscreenMode = true;
+
+  // Hide non-essential elements
+  document.querySelector(".main-layout").style.display = "none";
+  document.querySelector(".spaceship-patterns").style.display = "none";
+  document.querySelector(".mobile-controls").style.display = "none";
+  document.querySelector(".click-instruction").style.display = "none";
+  document.querySelector(".title").style.display = "none";
+
+  // Show fullscreen container
+  let fullscreenContainer = document.getElementById("fullscreen-container");
+  if (!fullscreenContainer) {
+    createFullscreenContainer();
+    fullscreenContainer = document.getElementById("fullscreen-container");
+  }
+  fullscreenContainer.style.display = "flex";
+
+  // Recalculate grid for fullscreen
+  calculateGridSize();
+
+  // Reset the grid with new size
+  state = Array.from({ length: numRows }, () => Array(numCols).fill(0));
+  initialState = state.map((row) => [...row]);
+
+  // Move game to fullscreen container
+  const gameElement = document.getElementById("game");
+  const fullscreenGame = document.getElementById("fullscreen-game");
+  fullscreenGame.appendChild(gameElement);
+
+  // Update cell size for fullscreen
+  document.documentElement.style.setProperty("--cell-size", "8px");
+  document.documentElement.style.setProperty("--cell-gap", "1px");
+
+  draw(state);
+  updateTickCounter();
+
+  console.log(`Entered fullscreen mode: ${numRows}x${numCols}`);
+}
+
+function exitFullscreen() {
+  isFullscreenMode = false;
+
+  // Hide fullscreen container
+  document.getElementById("fullscreen-container").style.display = "none";
+
+  // Show normal elements
+  document.querySelector(".main-layout").style.display = "flex";
+  document.querySelector(".spaceship-patterns").style.display = "grid";
+  document.querySelector(".mobile-controls").style.display =
+    window.innerWidth <= 768 ? "flex" : "none";
+  document.querySelector(".click-instruction").style.display = "block";
+  document.querySelector(".title").style.display = "flex";
+
+  // Restore normal grid size
+  numRows = normalGridSize.rows;
+  numCols = normalGridSize.cols;
+
+  // Move game back to normal container
+  const gameElement = document.getElementById("game");
+  const normalContainer = document.querySelector(".container");
+  normalContainer.insertBefore(gameElement, normalContainer.children[1]);
+
+  // Restore normal cell size
+  document.documentElement.style.setProperty("--cell-size", "12px");
+  document.documentElement.style.setProperty("--cell-gap", "1px");
+
+  // Reset the grid with normal size
+  state = Array.from({ length: numRows }, () => Array(numCols).fill(0));
+  initialState = state.map((row) => [...row]);
+
+  draw(state);
+  updateTickCounter();
+
+  console.log(`Exited fullscreen mode: ${numRows}x${numCols}`);
+}
+
+function createFullscreenContainer() {
+  const fullscreenContainer = document.createElement("div");
+  fullscreenContainer.id = "fullscreen-container";
+  fullscreenContainer.innerHTML = `
+    <div id="fullscreen-controls">
+      <button id="fullscreen-start">Start</button>
+      <button id="fullscreen-stop">Stop</button>
+      <button id="fullscreen-reset">Reset</button>
+      <button id="exit-fullscreen">Exit Fullscreen</button>
+      <span id="fullscreen-tick-counter">Tick: 0</span>
+    </div>
+    <div id="fullscreen-game"></div>
+    <div id="fullscreen-patterns">
+      <div class="fullscreen-pattern-category">
+        <span class="pattern-category-title">🚀 Spaceships:</span>
+        <button class="fullscreen-pattern-btn" data-pattern="glider">Glider</button>
+        <button class="fullscreen-pattern-btn" data-pattern="lwss">LWSS</button>
+        <button class="fullscreen-pattern-btn" data-pattern="mwss">MWSS</button>
+        <button class="fullscreen-pattern-btn" data-pattern="hwss">HWSS</button>
+        <button class="fullscreen-pattern-btn" data-pattern="copperhead">Copperhead</button>
+        <button class="fullscreen-pattern-btn" data-pattern="Weekender">Weekender</button>
+        <button class="fullscreen-pattern-btn" data-pattern="pufferfish">Pufferfish</button>
+      </div>
+      <div class="fullscreen-pattern-category">
+        <span class="pattern-category-title">🔄 Oscillators:</span>
+        <button class="fullscreen-pattern-btn" data-pattern="blinker">Blinker</button>
+        <button class="fullscreen-pattern-btn" data-pattern="toad">Toad</button>
+        <button class="fullscreen-pattern-btn" data-pattern="beacon">Beacon</button>
+        <button class="fullscreen-pattern-btn" data-pattern="pulsar">Pulsar</button>
+        <button class="fullscreen-pattern-btn" data-pattern="Galaxy">Galaxy</button>
+      </div>
+      <div class="fullscreen-pattern-category">
+        <span class="pattern-category-title">🔸 Still Lifes:</span>
+        <button class="fullscreen-pattern-btn" data-pattern="block">Block</button>
+        <button class="fullscreen-pattern-btn" data-pattern="beehive">Beehive</button>
+        <button class="fullscreen-pattern-btn" data-pattern="loaf">Loaf</button>
+        <button class="fullscreen-pattern-btn" data-pattern="boat">Boat</button>
+      </div>
+      <div class="fullscreen-pattern-category">
+        <span class="pattern-category-title">⚡ Generators:</span>
+        <button class="fullscreen-pattern-btn" data-pattern="glidergun">Glider Gun</button>
+      </div>
+      <div class="fullscreen-pattern-category">
+        <span class="pattern-category-title">🧬 Methuselahs:</span>
+        <button class="fullscreen-pattern-btn" data-pattern="acorn">Acorn</button>
+        <button class="fullscreen-pattern-btn" data-pattern="diehard">Diehard</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(fullscreenContainer);
+
+  // Add event listeners for fullscreen controls
+  document.getElementById("fullscreen-start").onclick = start;
+  document.getElementById("fullscreen-stop").onclick = stop;
+  document.getElementById("fullscreen-reset").onclick = reset;
+  document.getElementById("exit-fullscreen").onclick = exitFullscreen;
+
+  // Add event listeners for fullscreen pattern buttons
+  const patternButtons = document.querySelectorAll(".fullscreen-pattern-btn");
+  patternButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      if (isInTutorialMode) return;
+      const patternName = this.getAttribute("data-pattern");
+      enterPlacementMode(patternName);
+    });
+  });
+}
+
 // Initialize or reinitialize the grid
 function initializeGrid() {
   calculateGridSize();
@@ -688,6 +930,14 @@ document.getElementById("apply-rules").onclick = applyCustomRules;
 document.getElementById("mobile-start").onclick = start;
 document.getElementById("mobile-stop").onclick = stop;
 document.getElementById("mobile-reset").onclick = reset;
+
+// Add mobile fullscreen listener when DOM loads
+document.addEventListener("DOMContentLoaded", function () {
+  const mobileFullscreenBtn = document.getElementById("mobile-fullscreen");
+  if (mobileFullscreenBtn) {
+    mobileFullscreenBtn.onclick = toggleFullscreen;
+  }
+});
 
 // Mobile pattern functionality
 function populatePatternDropdown() {
@@ -758,6 +1008,7 @@ function showPatternPreview(patternName) {
     toad: "Period 2 oscillator.",
     beacon: "Period 2 oscillator.",
     pulsar: "Period 3 oscillator, very stable.",
+    Galaxy: "Period 8 oscillator with rotating symmetric pattern.",
     block: "Simplest still life pattern.",
     beehive: "Common still life pattern.",
     loaf: "Still life with an asymmetric shape.",
@@ -767,6 +1018,8 @@ function showPatternPreview(patternName) {
     diehard: "Dies completely after 130 generations.",
     copperhead: "Stable diagonal-moving spaceship.",
     pufferfish: "Orthogonal spaceship that leaves a trail of debris behind.",
+    Weekender:
+      "Orthogonal spaceship, travels horizontally every 5 generations.",
   };
 
   description.textContent =
@@ -798,6 +1051,12 @@ function toggleMobileRules() {
 
 // Add event listeners for clickable spaceship patterns
 document.addEventListener("DOMContentLoaded", function () {
+  // Add fullscreen button event listener
+  const fullscreenBtn = document.getElementById("toggle-fullscreen");
+  if (fullscreenBtn) {
+    fullscreenBtn.onclick = toggleFullscreen;
+  }
+
   const shipDisplays = document.querySelectorAll(".ship-display.clickable");
   shipDisplays.forEach((display) => {
     display.addEventListener("click", function () {

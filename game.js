@@ -22,27 +22,23 @@ function calculateGridSize() {
   const maxCols = Math.floor(availableWidth / (cellSize + cellGap));
 
   // Set reasonable bounds for grid size - adjusted based on screen size
-  let minCols, preferredCols, maxColsLimit;
+  let minCols, maxColsLimit;
 
   if (window.innerWidth <= 380) {
     // Very small screens
     minCols = Math.max(25, Math.min(30, maxCols));
-    preferredCols = 30;
     maxColsLimit = 40;
   } else if (window.innerWidth <= 480) {
     // Small screens
     minCols = Math.max(25, Math.min(35, maxCols));
-    preferredCols = 35;
     maxColsLimit = 45;
   } else if (window.innerWidth <= 900) {
     // Medium screens
     minCols = Math.max(36, Math.min(45, maxCols)); // Increased minimum for glider gun
-    preferredCols = 45; // Increased preferred size
     maxColsLimit = 55; // Increased maximum
   } else {
     // Large screens
     minCols = Math.max(40, Math.min(50, maxCols)); // Increased minimum for glider gun
-    preferredCols = 50; // Increased preferred size
     maxColsLimit = 70; // Increased maximum
   }
 
@@ -138,7 +134,6 @@ let selectedPatternType = null;
 // Fullscreen mode variables
 let isFullscreenMode = false;
 let normalGridSize = { rows: 40, cols: 40 };
-let fullscreenGridSize = { rows: 60, cols: 80 };
 
 // Game rules - default Conway's Game of Life
 let survivalRules = [2, 3]; // Live cell survives with these neighbor counts
@@ -567,20 +562,27 @@ function updateTickCounter() {
 }
 
 function disableControls() {
-  document.getElementById("start").disabled = true;
-  document.getElementById("stop").disabled = true;
-  document.getElementById("reset").disabled = true;
-  document.getElementById("apply-rules").disabled = true;
-  document.getElementById("survival-rules").disabled = true;
-  document.getElementById("birth-rules").disabled = true;
+  // Disable main controls
+  const controlIds = [
+    "start",
+    "stop",
+    "reset",
+    "apply-rules",
+    "survival-rules",
+    "birth-rules",
+  ];
+  controlIds.forEach((id) => {
+    document.getElementById(id).disabled = true;
+  });
 
   const fullscreenBtn = document.getElementById("toggle-fullscreen");
   if (fullscreenBtn) fullscreenBtn.disabled = true;
 
   // Disable mobile controls during tutorial
-  document.getElementById("mobile-start").disabled = true;
-  document.getElementById("mobile-stop").disabled = true;
-  document.getElementById("mobile-reset").disabled = true;
+  const mobileControlIds = ["mobile-start", "mobile-stop", "mobile-reset"];
+  mobileControlIds.forEach((id) => {
+    document.getElementById(id).disabled = true;
+  });
 
   const mobileFullscreenBtn = document.getElementById("mobile-fullscreen");
   if (mobileFullscreenBtn) mobileFullscreenBtn.disabled = true;
@@ -602,20 +604,27 @@ function disableControls() {
 }
 
 function enableControls() {
-  document.getElementById("start").disabled = false;
-  document.getElementById("stop").disabled = false;
-  document.getElementById("reset").disabled = false;
-  document.getElementById("apply-rules").disabled = false;
-  document.getElementById("survival-rules").disabled = false;
-  document.getElementById("birth-rules").disabled = false;
+  // Enable main controls
+  const controlIds = [
+    "start",
+    "stop",
+    "reset",
+    "apply-rules",
+    "survival-rules",
+    "birth-rules",
+  ];
+  controlIds.forEach((id) => {
+    document.getElementById(id).disabled = false;
+  });
 
   const fullscreenBtn = document.getElementById("toggle-fullscreen");
   if (fullscreenBtn) fullscreenBtn.disabled = false;
 
   // Enable mobile controls
-  document.getElementById("mobile-start").disabled = false;
-  document.getElementById("mobile-stop").disabled = false;
-  document.getElementById("mobile-reset").disabled = false;
+  const mobileControlIds = ["mobile-start", "mobile-stop", "mobile-reset"];
+  mobileControlIds.forEach((id) => {
+    document.getElementById(id).disabled = false;
+  });
 
   const mobileFullscreenBtn = document.getElementById("mobile-fullscreen");
   if (mobileFullscreenBtn) mobileFullscreenBtn.disabled = false;
@@ -913,13 +922,6 @@ function initializeGrid() {
   updatePatternVisibility();
 }
 
-function addSpecificShip(shipType) {
-  if (isInTutorialMode) return; // Don't allow during tutorial
-
-  // Enter placement mode instead of auto-placing
-  enterPlacementMode(shipType);
-}
-
 // Event listeners
 document.getElementById("start").onclick = start;
 document.getElementById("stop").onclick = stop;
@@ -931,15 +933,117 @@ document.getElementById("mobile-start").onclick = start;
 document.getElementById("mobile-stop").onclick = stop;
 document.getElementById("mobile-reset").onclick = reset;
 
+// Function to generate pattern displays dynamically
+function generatePatternDisplays() {
+  Object.keys(spaceshipPatterns).forEach((patternName) => {
+    const pattern = spaceshipPatterns[patternName];
+    const patternElement = document.querySelector(
+      `[data-ship="${patternName}"] .ship-pattern`
+    );
+
+    if (patternElement) {
+      // Clear existing content
+      patternElement.innerHTML = "";
+
+      // Set up CSS grid
+      patternElement.style.display = "grid";
+      patternElement.style.gridTemplateColumns = `repeat(${pattern[0].length}, 8px)`;
+      patternElement.style.gap = "1px";
+
+      // Generate cells
+      for (let i = 0; i < pattern.length; i++) {
+        for (let j = 0; j < pattern[i].length; j++) {
+          const cell = document.createElement("div");
+          cell.className = pattern[i][j] ? "cell alive" : "cell";
+          patternElement.appendChild(cell);
+        }
+      }
+    }
+  });
+}
+
 // Add mobile fullscreen listener when DOM loads
 document.addEventListener("DOMContentLoaded", function () {
+  // Generate all pattern displays dynamically
+  generatePatternDisplays();
+
   const mobileFullscreenBtn = document.getElementById("mobile-fullscreen");
   if (mobileFullscreenBtn) {
     mobileFullscreenBtn.onclick = toggleFullscreen;
   }
-});
 
-// Mobile pattern functionality
+  // Add fullscreen button event listener
+  const fullscreenBtn = document.getElementById("toggle-fullscreen");
+  if (fullscreenBtn) {
+    fullscreenBtn.onclick = toggleFullscreen;
+  }
+
+  const shipDisplays = document.querySelectorAll(".ship-display.clickable");
+  shipDisplays.forEach((display) => {
+    display.addEventListener("click", function () {
+      if (isInTutorialMode) return; // Don't allow during tutorial
+
+      const shipType = this.getAttribute("data-ship");
+      enterPlacementMode(shipType);
+    });
+  });
+
+  // Mobile pattern dropdown events
+  const patternDropdown = document.getElementById("pattern-dropdown");
+  const viewPatternButton = document.getElementById("view-pattern");
+  const toggleRulesButton = document.getElementById("toggle-rules");
+  const modal = document.getElementById("pattern-preview-modal");
+  const closeModal = document.querySelector(".pattern-modal-close");
+  const placePatternButton = document.getElementById("place-pattern");
+  const cancelPatternButton = document.getElementById("cancel-pattern");
+
+  // Pattern dropdown change
+  patternDropdown.addEventListener("change", function () {
+    const selectedPattern = this.value;
+    viewPatternButton.disabled = !selectedPattern || isInTutorialMode;
+  });
+
+  // View pattern button
+  viewPatternButton.addEventListener("click", function () {
+    const selectedPattern = patternDropdown.value;
+    if (selectedPattern) {
+      showPatternPreview(selectedPattern);
+    }
+  });
+
+  // Toggle rules button
+  toggleRulesButton.addEventListener("click", toggleMobileRules);
+
+  // Modal events
+  closeModal.addEventListener("click", function () {
+    modal.style.display = "none";
+  });
+
+  cancelPatternButton.addEventListener("click", function () {
+    modal.style.display = "none";
+  });
+
+  placePatternButton.addEventListener("click", function () {
+    const patternName = this.getAttribute("data-pattern");
+    if (patternName && !isInTutorialMode) {
+      modal.style.display = "none";
+      enterPlacementMode(patternName);
+      patternDropdown.value = ""; // Reset dropdown
+      viewPatternButton.disabled = true;
+    }
+  });
+
+  // Close modal when clicking outside
+  window.addEventListener("click", function (event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  // Initial pattern visibility update after DOM is loaded
+  updatePatternVisibility();
+  populatePatternDropdown();
+});
 function populatePatternDropdown() {
   const dropdown = document.getElementById("pattern-dropdown");
   dropdown.innerHTML = '<option value="">Select a pattern...</option>';
@@ -1048,81 +1152,6 @@ function toggleMobileRules() {
     button.textContent = "Rules & Settings";
   }
 }
-
-// Add event listeners for clickable spaceship patterns
-document.addEventListener("DOMContentLoaded", function () {
-  // Add fullscreen button event listener
-  const fullscreenBtn = document.getElementById("toggle-fullscreen");
-  if (fullscreenBtn) {
-    fullscreenBtn.onclick = toggleFullscreen;
-  }
-
-  const shipDisplays = document.querySelectorAll(".ship-display.clickable");
-  shipDisplays.forEach((display) => {
-    display.addEventListener("click", function () {
-      if (isInTutorialMode) return; // Don't allow during tutorial
-
-      const shipType = this.getAttribute("data-ship");
-      addSpecificShip(shipType);
-    });
-  });
-
-  // Mobile pattern dropdown events
-  const patternDropdown = document.getElementById("pattern-dropdown");
-  const viewPatternButton = document.getElementById("view-pattern");
-  const toggleRulesButton = document.getElementById("toggle-rules");
-  const modal = document.getElementById("pattern-preview-modal");
-  const closeModal = document.querySelector(".pattern-modal-close");
-  const placePatternButton = document.getElementById("place-pattern");
-  const cancelPatternButton = document.getElementById("cancel-pattern");
-
-  // Pattern dropdown change
-  patternDropdown.addEventListener("change", function () {
-    const selectedPattern = this.value;
-    viewPatternButton.disabled = !selectedPattern || isInTutorialMode;
-  });
-
-  // View pattern button
-  viewPatternButton.addEventListener("click", function () {
-    const selectedPattern = patternDropdown.value;
-    if (selectedPattern) {
-      showPatternPreview(selectedPattern);
-    }
-  });
-
-  // Toggle rules button
-  toggleRulesButton.addEventListener("click", toggleMobileRules);
-
-  // Modal events
-  closeModal.addEventListener("click", function () {
-    modal.style.display = "none";
-  });
-
-  cancelPatternButton.addEventListener("click", function () {
-    modal.style.display = "none";
-  });
-
-  placePatternButton.addEventListener("click", function () {
-    const patternName = this.getAttribute("data-pattern");
-    if (patternName && !isInTutorialMode) {
-      modal.style.display = "none";
-      enterPlacementMode(patternName);
-      patternDropdown.value = ""; // Reset dropdown
-      viewPatternButton.disabled = true;
-    }
-  });
-
-  // Close modal when clicking outside
-  window.addEventListener("click", function (event) {
-    if (event.target === modal) {
-      modal.style.display = "none";
-    }
-  });
-
-  // Initial pattern visibility update after DOM is loaded
-  updatePatternVisibility();
-  populatePatternDropdown();
-});
 
 // Initialize - start tutorial automatically
 initializeGrid(); // Initialize grid based on screen size

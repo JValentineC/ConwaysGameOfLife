@@ -693,6 +693,11 @@ function start() {
 
   if (isInTutorialMode) {
     tickCount = 0;
+  } else {
+    // Track game start for authenticated users
+    if (typeof authSystem !== "undefined" && authSystem.isAuthenticated()) {
+      authSystem.incrementGamesPlayed();
+    }
   }
 
   updateTickCounter();
@@ -702,6 +707,15 @@ function start() {
     tickCount++;
     updateTickCounter();
     draw(state);
+
+    // Track ticks for authenticated users (outside tutorial)
+    if (
+      !isInTutorialMode &&
+      typeof authSystem !== "undefined" &&
+      authSystem.isAuthenticated()
+    ) {
+      authSystem.addTicks(1);
+    }
 
     // Check if tutorial is complete
     if (isInTutorialMode && tickCount >= tutorialTicksRequired) {

@@ -1148,3 +1148,381 @@ button,
     font-size: 0.65rem;
   }
 }
+
+/* Authentication System Styles */
+#auth-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999;
+  background: rgba(26, 26, 26, 0.95);
+  border: 2px solid #ffd700;
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 300px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.auth-panel {
+  color: white;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+#username-display {
+  color: #ffd700;
+  font-weight: bold;
+  text-align: center;
+  flex: 1;
+}
+
+.minimize-btn {
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffd700;
+  border: 1px solid #ffd700;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  margin-left: 10px;
+}
+
+.minimize-btn:hover {
+  background: #ffd700;
+  color: black;
+}
+
+.user-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Minimized state */
+#auth-container.minimized {
+  min-width: 200px;
+}
+
+#auth-container.minimized .user-actions {
+  display: none !important;
+}
+
+.auth-forms {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-toggle {
+  display: flex;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 10px 15px;
+  background: transparent;
+  color: #ccc;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.auth-tab.active {
+  background: #ffd700;
+  color: black;
+}
+
+.auth-tab:hover:not(.active) {
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffd700;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.auth-form h3 {
+  margin: 0 0 10px 0;
+  color: #ffd700;
+  text-align: center;
+}
+
+.auth-form input {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: #ffd700;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.auth-form input::placeholder {
+  color: #aaa;
+}
+
+.auth-btn {
+  padding: 12px 20px;
+  background: #ffd700;
+  color: black;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.auth-btn:hover {
+  background: #ffed4e;
+  transform: translateY(-1px);
+}
+
+.auth-btn:active {
+  transform: translateY(0);
+}
+
+/* Profile Modal Styles */
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-info p {
+  margin: 8px 0;
+  color: #ddd;
+}
+
+.profile-info strong {
+  color: #ffd700;
+}
+
+.game-stats {
+  background: rgba(255, 215, 0, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.game-stats h4 {
+  margin: 0 0 10px 0;
+  color: #ffd700;
+}
+
+.game-stats p {
+  margin: 5px 0;
+  color: #ddd;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.profile-actions .btn {
+  flex: 1;
+  min-width: 120px;
+}
+
+/* Form styles in modals */
+#change-password-form,
+#update-email-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+#change-password-form input,
+#update-email-form input {
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+#change-password-form input:focus,
+#update-email-form input:focus {
+  outline: none;
+  border-color: #ffd700;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+#change-password-form input::placeholder,
+#update-email-form input::placeholder {
+  color: #aaa;
+}
+
+/* Message Container */
+.message-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.message {
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+  min-width: 250px;
+  animation: slideIn 0.3s ease, slideOut 0.3s ease 2.7s forwards;
+  pointer-events: auto;
+}
+
+.message-success {
+  background: rgba(76, 175, 80, 0.9);
+  color: white;
+  border: 2px solid #4caf50;
+}
+
+.message-error {
+  background: rgba(244, 67, 54, 0.9);
+  color: white;
+  border: 2px solid #f44336;
+}
+
+.message-info {
+  background: rgba(33, 150, 243, 0.9);
+  color: white;
+  border: 2px solid #2196f3;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+/* Mobile Authentication Styles */
+@media (max-width: 768px) {
+  #auth-container {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
+    margin: 10px;
+    min-width: auto;
+    max-width: calc(100% - 20px);
+  }
+
+  .auth-toggle {
+    margin-bottom: 15px;
+  }
+
+  .auth-tab {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .auth-form input {
+    padding: 10px;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  .auth-btn {
+    padding: 10px 16px;
+    font-size: 16px;
+  }
+
+  .profile-actions {
+    flex-direction: column;
+  }
+
+  .profile-actions .btn {
+    min-width: auto;
+  }
+
+  .message {
+    min-width: 200px;
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  #auth-container {
+    margin: 5px;
+    padding: 15px;
+    max-width: calc(100% - 10px);
+  }
+
+  .auth-form {
+    gap: 12px;
+  }
+
+  .auth-form input,
+  .auth-btn {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  #change-password-form,
+  #update-email-form {
+    gap: 12px;
+  }
+
+  .message {
+    min-width: 180px;
+    margin: 0 10px;
+  }
+}

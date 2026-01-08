@@ -251,7 +251,9 @@ function setupControls() {
   document.getElementById("reset")?.addEventListener("click", reset);
   document.getElementById("clear")?.addEventListener("click", clear);
   document.getElementById("randomize")?.addEventListener("click", randomize);
-  document.getElementById("toggle-fullscreen")?.addEventListener("click", toggleFullscreen);
+  document
+    .getElementById("toggle-fullscreen")
+    ?.addEventListener("click", toggleFullscreen);
 
   document.getElementById("speed-slider")?.addEventListener("input", (e) => {
     updateSpeed(e.target.value);
@@ -403,17 +405,17 @@ function initialize() {
  * Setup collapsible sections
  */
 function setupCollapsibleSections() {
-  const collapseToggles = document.querySelectorAll('.collapse-toggle');
-  
-  collapseToggles.forEach(toggle => {
-    toggle.addEventListener('click', () => {
-      const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
-      const contentId = toggle.getAttribute('aria-controls');
+  const collapseToggles = document.querySelectorAll(".collapse-toggle");
+
+  collapseToggles.forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      const isExpanded = toggle.getAttribute("aria-expanded") === "true";
+      const contentId = toggle.getAttribute("aria-controls");
       const content = document.getElementById(contentId);
-      
+
       if (content) {
-        toggle.setAttribute('aria-expanded', !isExpanded);
-        content.classList.toggle('collapsed');
+        toggle.setAttribute("aria-expanded", !isExpanded);
+        content.classList.toggle("collapsed");
       }
     });
   });
@@ -424,38 +426,42 @@ function setupCollapsibleSections() {
  */
 function setupMobileControls() {
   // Mobile start button
-  document.getElementById('mobile-start')?.addEventListener('click', start);
-  document.getElementById('mobile-stop')?.addEventListener('click', stop);
-  document.getElementById('mobile-reset')?.addEventListener('click', reset);
-  document.getElementById('mobile-clear')?.addEventListener('click', clear);
-  document.getElementById('mobile-randomize')?.addEventListener('click', randomize);
-  document.getElementById('mobile-fullscreen')?.addEventListener('click', toggleFullscreen);
-  
+  document.getElementById("mobile-start")?.addEventListener("click", start);
+  document.getElementById("mobile-stop")?.addEventListener("click", stop);
+  document.getElementById("mobile-reset")?.addEventListener("click", reset);
+  document.getElementById("mobile-clear")?.addEventListener("click", clear);
+  document
+    .getElementById("mobile-randomize")
+    ?.addEventListener("click", randomize);
+  document
+    .getElementById("mobile-fullscreen")
+    ?.addEventListener("click", toggleFullscreen);
+
   // Mobile rules toggle
-  const toggleRules = document.getElementById('toggle-rules');
-  const rulesSection = document.querySelector('.game-rules');
-  const historySection = document.querySelector('.game-history');
-  
+  const toggleRules = document.getElementById("toggle-rules");
+  const rulesSection = document.querySelector(".game-rules");
+  const historySection = document.querySelector(".game-history");
+
   if (toggleRules && rulesSection && historySection) {
-    toggleRules.addEventListener('click', () => {
-      const isExpanded = toggleRules.getAttribute('aria-expanded') === 'true';
-      
+    toggleRules.addEventListener("click", () => {
+      const isExpanded = toggleRules.getAttribute("aria-expanded") === "true";
+
       if (isExpanded) {
-        rulesSection.style.display = 'none';
-        historySection.style.display = 'none';
-        toggleRules.setAttribute('aria-expanded', 'false');
+        rulesSection.style.display = "none";
+        historySection.style.display = "none";
+        toggleRules.setAttribute("aria-expanded", "false");
       } else {
-        rulesSection.style.display = 'block';
-        historySection.style.display = 'block';
-        toggleRules.setAttribute('aria-expanded', 'true');
+        rulesSection.style.display = "block";
+        historySection.style.display = "block";
+        toggleRules.setAttribute("aria-expanded", "true");
       }
     });
-    
+
     // Start with sections hidden on mobile
     if (window.innerWidth <= 768) {
-      rulesSection.style.display = 'none';
-      historySection.style.display = 'none';
-      toggleRules.setAttribute('aria-expanded', 'false');
+      rulesSection.style.display = "none";
+      historySection.style.display = "none";
+      toggleRules.setAttribute("aria-expanded", "false");
     }
   }
 }

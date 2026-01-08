@@ -69,12 +69,48 @@
       aria-label="Mobile game controls"
     >
       <div class="mobile-game-controls">
-        <button id="mobile-start" class="icon-btn-mobile" aria-label="Start simulation" title="Start">▶️</button>
-        <button id="mobile-stop" class="icon-btn-mobile" aria-label="Stop simulation" title="Stop">⏸️</button>
-        <button id="mobile-reset" class="icon-btn-mobile" aria-label="Reset grid" title="Reset">🔄</button>
-        <button id="mobile-clear" class="icon-btn-mobile" aria-label="Clear grid" title="Clear">🗑️</button>
-        <button id="mobile-randomize" class="icon-btn-mobile" aria-label="Randomize" title="Randomize">🎲</button>
-        <button id="mobile-fullscreen" class="icon-btn-mobile" aria-label="Toggle fullscreen mode" title="Fullscreen">⛶</button>
+        <button
+          id="mobile-start"
+          class="icon-btn-mobile"
+          aria-label="Start simulation"
+          title="Start"
+          >▶️</button
+        >
+        <button
+          id="mobile-stop"
+          class="icon-btn-mobile"
+          aria-label="Stop simulation"
+          title="Stop"
+          >⏸️</button
+        >
+        <button
+          id="mobile-reset"
+          class="icon-btn-mobile"
+          aria-label="Reset grid"
+          title="Reset"
+          >🔄</button
+        >
+        <button
+          id="mobile-clear"
+          class="icon-btn-mobile"
+          aria-label="Clear grid"
+          title="Clear"
+          >🗑️</button
+        >
+        <button
+          id="mobile-randomize"
+          class="icon-btn-mobile"
+          aria-label="Randomize"
+          title="Randomize"
+          >🎲</button
+        >
+        <button
+          id="mobile-fullscreen"
+          class="icon-btn-mobile"
+          aria-label="Toggle fullscreen mode"
+          title="Fullscreen"
+          >⛶</button
+        >
       </div>
 
       <div
@@ -98,7 +134,11 @@
       </div>
 
       <div class="mobile-rules-toggle">
-        <button id="toggle-rules" class="mobile-collapse-btn" aria-expanded="false">
+        <button
+          id="toggle-rules"
+          class="mobile-collapse-btn"
+          aria-expanded="false"
+        >
           <span class="expand-icon">▼</span> Settings & Info
         </button>
       </div>
@@ -124,107 +164,112 @@
         role="complementary"
         aria-label="Game rules and customization"
       >
-        <button class="collapse-toggle" aria-expanded="true" aria-controls="rules-content">
+        <button
+          class="collapse-toggle"
+          aria-expanded="true"
+          aria-controls="rules-content"
+        >
           <span class="collapse-icon">◀</span>
           <h2>Settings</h2>
         </button>
         <div id="rules-content" class="collapsible-content">
-
-        <!-- Theme Controls -->
-        <div class="theme-controls">
-          <h3>Theme Settings</h3>
-          <div class="theme-buttons">
-            <button id="theme-toggle" aria-label="Toggle dark/light mode"
-              >🌓 Toggle Theme</button
-            >
-            <button id="color-picker-btn" aria-label="Choose cell color"
-              >🎨 Cell Color</button
-            >
-          </div>
-          <input
-            type="color"
-            id="alive-color-picker"
-            value="#efe9e9"
-            style="display: none"
-          />
-        </div>
-
-        <div class="rules-customization">
-          <h3>Customize Rules</h3>
-          <div class="rule-input">
-            <label for="survival-rules"
-              >Survival (live cell stays alive with):</label
-            >
+          <!-- Theme Controls -->
+          <div class="theme-controls">
+            <h3>Theme Settings</h3>
+            <div class="theme-buttons">
+              <button id="theme-toggle" aria-label="Toggle dark/light mode"
+                >🌓 Toggle Theme</button
+              >
+              <button id="color-picker-btn" aria-label="Choose cell color"
+                >🎨 Cell Color</button
+              >
+            </div>
             <input
-              type="text"
-              id="survival-rules"
-              value="2,3"
-              placeholder="e.g., 2,3"
-              aria-describedby="survival-help"
+              type="color"
+              id="alive-color-picker"
+              value="#efe9e9"
+              style="display: none"
             />
-            <small id="survival-help">Comma-separated neighbor counts</small>
           </div>
-          <div class="rule-input">
-            <label for="birth-rules"
-              >Birth (dead cell becomes alive with):</label
+
+          <div class="rules-customization">
+            <h3>Customize Rules</h3>
+            <div class="rule-input">
+              <label for="survival-rules"
+                >Survival (live cell stays alive with):</label
+              >
+              <input
+                type="text"
+                id="survival-rules"
+                value="2,3"
+                placeholder="e.g., 2,3"
+                aria-describedby="survival-help"
+              />
+              <small id="survival-help">Comma-separated neighbor counts</small>
+            </div>
+            <div class="rule-input">
+              <label for="birth-rules"
+                >Birth (dead cell becomes alive with):</label
+              >
+              <input
+                type="text"
+                id="birth-rules"
+                value="3"
+                placeholder="e.g., 3"
+                aria-describedby="birth-help"
+              />
+              <small id="birth-help">Comma-separated neighbor counts</small>
+            </div>
+            <button
+              id="apply-rules"
+              aria-label="Apply custom rules to simulation"
+              >Apply Rules</button
             >
-            <input
-              type="text"
-              id="birth-rules"
-              value="3"
-              placeholder="e.g., 3"
-              aria-describedby="birth-help"
-            />
-            <small id="birth-help">Comma-separated neighbor counts</small>
           </div>
-          <button id="apply-rules" aria-label="Apply custom rules to simulation"
-            >Apply Rules</button
-          >
-        </div>
 
-        <!-- Statistics Dashboard -->
-        <div class="statistics-dashboard">
-          <h3>Statistics</h3>
-          <div class="stat-item">
-            <span class="stat-label">Population:</span>
-            <span id="stat-population" class="stat-value">0</span>
+          <!-- Statistics Dashboard -->
+          <div class="statistics-dashboard">
+            <h3>Statistics</h3>
+            <div class="stat-item">
+              <span class="stat-label">Population:</span>
+              <span id="stat-population" class="stat-value">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Births:</span>
+              <span id="stat-births" class="stat-value">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Deaths:</span>
+              <span id="stat-deaths" class="stat-value">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Peak Pop:</span>
+              <span id="stat-peak" class="stat-value">0</span>
+            </div>
+            <button id="reset-stats" aria-label="Reset statistics"
+              >Reset Stats</button
+            >
           </div>
-          <div class="stat-item">
-            <span class="stat-label">Births:</span>
-            <span id="stat-births" class="stat-value">0</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Deaths:</span>
-            <span id="stat-deaths" class="stat-value">0</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Peak Pop:</span>
-            <span id="stat-peak" class="stat-value">0</span>
-          </div>
-          <button id="reset-stats" aria-label="Reset statistics"
-            >Reset Stats</button
-          >
-        </div>
 
-        <h3>Current Rules</h3>
-        <ul id="current-rules">
-          <li
-            >Any live cell with fewer than two live neighbours dies
-            (underpopulation).</li
-          >
-          <li
-            >Any live cell with two or three live neighbours lives on to the
-            next generation.</li
-          >
-          <li
-            >Any live cell with more than three live neighbours dies
-            (overpopulation).</li
-          >
-          <li
-            >Any dead cell with exactly three live neighbours becomes a live
-            cell (reproduction).</li
-          >
-        </ul>
+          <h3>Current Rules</h3>
+          <ul id="current-rules">
+            <li
+              >Any live cell with fewer than two live neighbours dies
+              (underpopulation).</li
+            >
+            <li
+              >Any live cell with two or three live neighbours lives on to the
+              next generation.</li
+            >
+            <li
+              >Any live cell with more than three live neighbours dies
+              (overpopulation).</li
+            >
+            <li
+              >Any dead cell with exactly three live neighbours becomes a live
+              cell (reproduction).</li
+            >
+          </ul>
         </div>
       </aside>
       <section class="game-center" role="main" aria-label="Game simulation">
@@ -250,30 +295,104 @@
         <div class="container">
           <div id="game" role="grid" aria-label="Game of Life grid"></div>
           <div class="control-buttons" role="group" aria-label="Game controls">
-            <button id="start" class="icon-btn" aria-label="Start simulation" title="Start">▶️</button>
-            <button id="stop" class="icon-btn" aria-label="Stop simulation" title="Stop">⏸️</button>
-            <button id="reset" class="icon-btn" aria-label="Reset grid to initial state" title="Reset">🔄</button>
-            <button id="clear" class="icon-btn" aria-label="Clear grid" title="Clear">🗑️</button>
-            <button id="randomize" class="icon-btn" aria-label="Randomize grid" title="Randomize">🎲</button>
-            <button id="toggle-fullscreen" class="icon-btn" aria-label="Toggle fullscreen mode" title="Fullscreen">⛶</button>
+            <button
+              id="start"
+              class="icon-btn"
+              aria-label="Start simulation"
+              title="Start"
+              >▶️</button
+            >
+            <button
+              id="stop"
+              class="icon-btn"
+              aria-label="Stop simulation"
+              title="Stop"
+              >⏸️</button
+            >
+            <button
+              id="reset"
+              class="icon-btn"
+              aria-label="Reset grid to initial state"
+              title="Reset"
+              >🔄</button
+            >
+            <button
+              id="clear"
+              class="icon-btn"
+              aria-label="Clear grid"
+              title="Clear"
+              >🗑️</button
+            >
+            <button
+              id="randomize"
+              class="icon-btn"
+              aria-label="Randomize grid"
+              title="Randomize"
+              >🎲</button
+            >
+            <button
+              id="toggle-fullscreen"
+              class="icon-btn"
+              aria-label="Toggle fullscreen mode"
+              title="Fullscreen"
+              >⛶</button
+            >
           </div>
           <div
             class="save-load-controls"
             role="group"
             aria-label="Save and load controls"
           >
-            <button id="save-state" class="icon-btn" aria-label="Save current grid state" title="Save">💾</button>
-            <button id="load-state" class="icon-btn" aria-label="Load saved grid state" title="Load" disabled>📂</button>
-            <button id="clear-saved" class="icon-btn" aria-label="Clear saved states" title="Clear Saves" disabled>🗑️</button>
+            <button
+              id="save-state"
+              class="icon-btn"
+              aria-label="Save current grid state"
+              title="Save"
+              >💾</button
+            >
+            <button
+              id="load-state"
+              class="icon-btn"
+              aria-label="Load saved grid state"
+              title="Load"
+              disabled
+              >📂</button
+            >
+            <button
+              id="clear-saved"
+              class="icon-btn"
+              aria-label="Clear saved states"
+              title="Clear Saves"
+              disabled
+              >🗑️</button
+            >
           </div>
           <div
             class="advanced-controls"
             role="group"
             aria-label="Advanced features"
           >
-            <button id="export-btn" class="icon-btn" aria-label="Export current pattern" title="Export">📥</button>
-            <button id="share-url" class="icon-btn" aria-label="Share pattern via URL" title="Share">🔗</button>
-            <button id="custom-editor-btn" class="icon-btn" aria-label="Open custom pattern editor" title="Editor">✏️</button>
+            <button
+              id="export-btn"
+              class="icon-btn"
+              aria-label="Export current pattern"
+              title="Export"
+              >📥</button
+            >
+            <button
+              id="share-url"
+              class="icon-btn"
+              aria-label="Share pattern via URL"
+              title="Share"
+              >🔗</button
+            >
+            <button
+              id="custom-editor-btn"
+              class="icon-btn"
+              aria-label="Open custom pattern editor"
+              title="Editor"
+              >✏️</button
+            >
           </div>
         </div>
       </section>
@@ -282,20 +401,24 @@
         role="complementary"
         aria-label="History and information"
       >
-        <button class="collapse-toggle" aria-expanded="true" aria-controls="history-content">
+        <button
+          class="collapse-toggle"
+          aria-expanded="true"
+          aria-controls="history-content"
+        >
           <span class="collapse-icon">▶</span>
           <h2>History</h2>
         </button>
         <div id="history-content" class="collapsible-content">
-        <p>
-          The Game of Life, devised by mathematician John Horton Conway in 1970,
-          is a cellular automaton that simulates the evolution of simple
-          organisms on a grid. Each cell can be alive or dead, and its fate is
-          determined by the state of its neighbors. The game became famous for
-          demonstrating how complex patterns and behaviors can emerge from
-          simple rules, and it has inspired research in mathematics, computer
-          science, and artificial life.
-        </p>
+          <p>
+            The Game of Life, devised by mathematician John Horton Conway in
+            1970, is a cellular automaton that simulates the evolution of simple
+            organisms on a grid. Each cell can be alive or dead, and its fate is
+            determined by the state of its neighbors. The game became famous for
+            demonstrating how complex patterns and behaviors can emerge from
+            simple rules, and it has inspired research in mathematics, computer
+            science, and artificial life.
+          </p>
         </div>
       </aside>
     </main>

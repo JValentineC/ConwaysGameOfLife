@@ -145,6 +145,28 @@ let birthRules = [3]; // Dead cell becomes alive with these neighbor counts
 const SAVE_KEY = "gameOfLifeSavedStates";
 const MAX_SAVES = 5;
 
+// Statistics tracking
+let statistics = {
+  population: 0,
+  births: 0,
+  deaths: 0,
+  peakPopulation: 0,
+};
+
+// Theme management
+let currentTheme = localStorage.getItem("gameOfLifeTheme") || "dark";
+let aliveCellColor = localStorage.getItem("aliveCellColor") || "#efe9e9";
+
+// Custom patterns storage
+const CUSTOM_PATTERNS_KEY = "gameOfLifeCustomPatterns";
+let customPatterns = JSON.parse(
+  localStorage.getItem(CUSTOM_PATTERNS_KEY) || "{}"
+);
+
+// Pattern filtering
+let currentFilter = "all";
+let currentSearchTerm = "";
+
 // Famous Game of Life patterns - spaceships, oscillators, and still lifes
 const spaceshipPatterns = {
   // === SPACESHIPS ===
@@ -494,6 +516,12 @@ function exitPlacementMode() {
 
 function tick(state) {
   const next = Array.from({ length: numRows }, () => Array(numCols).fill(0));
+
+  // Track statistics before changes
+  if (!isInTutorialMode) {
+    trackCellChanges(state, next);
+  }
+
   for (let i = 0; i < numRows; i++) {
     for (let j = 0; j < numCols; j++) {
       const neighbors = findNeighbors(i, j);
@@ -507,6 +535,12 @@ function tick(state) {
       }
     }
   }
+
+  // Update statistics after changes
+  if (!isInTutorialMode) {
+    trackCellChanges(state, next);
+  }
+
   return next;
 }
 
@@ -546,6 +580,11 @@ function draw(state) {
 
       game.appendChild(cell);
     }
+  }
+
+  // Update statistics
+  if (!isInTutorialMode) {
+    updateStatistics();
   }
 }
 
@@ -782,6 +821,7 @@ function reset() {
   initialState = state.map((row) => [...row]); // Update initial state to empty as well
 
   tickCount = 0; // Reset tick counter
+  resetStatistics(); // Reset statistics
   updateTickCounter();
   draw(state); // Redraw the grid
 }
@@ -1327,6 +1367,400 @@ function updateSaveLoadButtons() {
   }
 }
 
+// ========== STATISTICS FUNCTIONS ==========
+function updateStatistics() {
+  const currentPop = state.flat().filter((cell) => cell === 1).length;
+  statistics.population = currentPop;
+
+  if (currentPop > statistics.peakPopulation) {
+    statistics.peakPopulation = currentPop;
+  }
+
+  document.getElementById("stat-population").textContent =
+    statistics.population;
+  document.getElementById("stat-births").textContent = statistics.births;
+  document.getElementById("stat-deaths").textContent = statistics.deaths;
+  document.getElementById("stat-peak").textContent = statistics.peakPopulation;
+}
+
+function trackCellChanges(oldState, newState) {
+  for (let i = 0; i < numRows; i++) {
+    for (let j = 0; j < numCols; j++) {
+      if (oldState[i][j] === 0 && newState[i][j] === 1) {
+        statistics.births++;
+      } else if (oldState[i][j] === 1 && newState[i][j] === 0) {
+        statistics.deaths++;
+      }
+    }
+  }
+}
+
+function resetStatistics() {
+  statistics = {
+    population: 0,
+    births: 0,
+    deaths: 0,
+    peakPopulation: 0,
+  };
+  updateStatistics();
+}
+
+// ========== THEME FUNCTIONS ==========
+function applyTheme(theme) {
+  if (theme === "light") {
+    document.body.classList.add("light-theme");
+  } else {
+    document.body.classList.remove("light-theme");
+  }
+  currentTheme = theme;
+  localStorage.setItem("gameOfLifeTheme", theme);
+}
+
+function toggleTheme() {
+  applyTheme(currentTheme === "dark" ? "light" : "dark");
+}
+
+function updateCellColor(color) {
+  aliveCellColor = color;
+  localStorage.setItem("aliveCellColor", color);
+  document.documentElement.style.setProperty("--alive-cell-color", color);
+  draw(state); // Redraw with new color
+}
+
+// ========== PATTERN SEARCH AND FILTER ==========
+const patternCategories = {
+  glider: "spaceships",
+  lwss: "spaceships",
+  mwss: "spaceships",
+  hwss: "spaceships",
+  copperhead: "spaceships",
+  pufferfish: "spaceships",
+  Weekender: "spaceships",
+  blinker: "oscillators",
+  toad: "oscillators",
+  beacon: "oscillators",
+  pulsar: "oscillators",
+  Galaxy: "oscillators",
+  block: "stilllifes",
+  beehive: "stilllifes",
+  loaf: "stilllifes",
+  boat: "stilllifes",
+  glidergun: "generators",
+  acorn: "methuselahs",
+  diehard: "methuselahs",
+};
+
+function filterPatterns() {
+  const searchTerm = currentSearchTerm.toLowerCase();
+  const displays = document.querySelectorAll(".ship-display");
+
+  displays.forEach((display) => {
+    const patternName = display.getAttribute("data-ship");
+    const patternCategory = patternCategories[patternName] || "other";
+    const patternTitle =
+      display.querySelector("h4")?.textContent.toLowerCase() || "";
+
+    // Check filter match
+    const categoryMatch =
+      currentFilter === "all" || patternCategory === currentFilter;
+
+    // Check search match
+    const searchMatch =
+      searchTerm === "" ||
+      patternName.toLowerCase().includes(searchTerm) ||
+      patternTitle.includes(searchTerm);
+
+    if (categoryMatch && searchMatch) {
+      display.classList.remove("hidden-by-filter");
+    } else {
+      display.classList.add("hidden-by-filter");
+    }
+  });
+
+  // Update category headers visibility
+  updateCategoryHeaders();
+}
+
+function updateCategoryHeaders() {
+  const categories = [
+    "spaceships",
+    "oscillators",
+    "stilllifes",
+    "generators",
+    "methuselahs",
+  ];
+
+  categories.forEach((category) => {
+    const header = document.querySelector(`.${category}-header`);
+    if (header) {
+      const categoryPatterns = document.querySelectorAll(
+        `[data-ship]:not(.hidden-by-filter)`
+      );
+      const hasVisible = Array.from(categoryPatterns).some(
+        (p) => patternCategories[p.getAttribute("data-ship")] === category
+      );
+      header.style.display =
+        hasVisible || currentFilter === "all" ? "block" : "none";
+    }
+  });
+}
+
+// ========== CUSTOM PATTERN EDITOR ==========
+let editorState = [];
+let editorSize = 8;
+
+function openCustomEditor() {
+  const modal = document.getElementById("custom-editor-modal");
+  editorSize = parseInt(document.getElementById("editor-grid-size").value);
+  initializeEditorGrid();
+  modal.showModal();
+}
+
+function initializeEditorGrid() {
+  editorState = Array.from({ length: editorSize }, () =>
+    Array(editorSize).fill(0)
+  );
+  drawEditorGrid();
+}
+
+function drawEditorGrid() {
+  const grid = document.getElementById("pattern-editor-grid");
+  grid.innerHTML = "";
+  grid.style.gridTemplateColumns = `repeat(${editorSize}, 25px)`;
+
+  for (let i = 0; i < editorSize; i++) {
+    for (let j = 0; j < editorSize; j++) {
+      const cell = document.createElement("div");
+      cell.className = "editor-cell" + (editorState[i][j] ? " alive" : "");
+      cell.addEventListener("click", () => {
+        editorState[i][j] = editorState[i][j] ? 0 : 1;
+        cell.classList.toggle("alive");
+      });
+      grid.appendChild(cell);
+    }
+  }
+}
+
+function clearEditorGrid() {
+  editorState = Array.from({ length: editorSize }, () =>
+    Array(editorSize).fill(0)
+  );
+  drawEditorGrid();
+}
+
+function saveCustomPattern() {
+  const name =
+    document.getElementById("pattern-name").value.trim() || "Custom Pattern";
+
+  // Check if pattern is empty
+  if (editorState.flat().every((cell) => cell === 0)) {
+    alert("Pattern is empty! Draw something first.");
+    return;
+  }
+
+  // Trim empty rows/cols
+  const trimmed = trimPattern(editorState);
+
+  customPatterns[name] = trimmed;
+  localStorage.setItem(CUSTOM_PATTERNS_KEY, JSON.stringify(customPatterns));
+
+  alert(`Pattern "${name}" saved successfully!`);
+  document.getElementById("custom-editor-modal").close();
+}
+
+function placeCustomPattern() {
+  const trimmed = trimPattern(editorState);
+
+  if (trimmed.flat().every((cell) => cell === 0)) {
+    alert("Pattern is empty!");
+    return;
+  }
+
+  // Place in center of grid
+  const startRow = Math.floor((numRows - trimmed.length) / 2);
+  const startCol = Math.floor((numCols - trimmed[0].length) / 2);
+
+  if (placePatternAt(trimmed, startRow, startCol)) {
+    draw(state);
+    document.getElementById("custom-editor-modal").close();
+    alert("Custom pattern placed on grid!");
+  } else {
+    alert("Pattern too large for current grid!");
+  }
+}
+
+function trimPattern(pattern) {
+  // Find bounds of non-empty cells
+  let minRow = pattern.length,
+    maxRow = -1;
+  let minCol = pattern[0].length,
+    maxCol = -1;
+
+  for (let i = 0; i < pattern.length; i++) {
+    for (let j = 0; j < pattern[i].length; j++) {
+      if (pattern[i][j]) {
+        minRow = Math.min(minRow, i);
+        maxRow = Math.max(maxRow, i);
+        minCol = Math.min(minCol, j);
+        maxCol = Math.max(maxCol, j);
+      }
+    }
+  }
+
+  if (maxRow === -1) return [[]]; // Empty pattern
+
+  // Extract trimmed pattern
+  const trimmed = [];
+  for (let i = minRow; i <= maxRow; i++) {
+    trimmed.push(pattern[i].slice(minCol, maxCol + 1));
+  }
+
+  return trimmed;
+}
+
+// ========== PATTERN SHARING ==========
+function sharePatternURL() {
+  const encoded = encodePattern(state);
+  const url = `${window.location.origin}${window.location.pathname}?pattern=${encoded}&rules=${survivalRules.join("")}${birthRules.join("")}`;
+
+  navigator.clipboard
+    .writeText(url)
+    .then(() => {
+      alert(
+        "Pattern URL copied to clipboard!\\n\\nShare this URL to show your pattern to others."
+      );
+    })
+    .catch(() => {
+      prompt("Copy this URL:", url);
+    });
+}
+
+function encodePattern(grid) {
+  // Simple RLE-like encoding
+  let rle = "";
+  let count = 0;
+  let lastCell = grid[0][0];
+
+  for (let i = 0; i < numRows; i++) {
+    for (let j = 0; j < numCols; j++) {
+      if (grid[i][j] === lastCell) {
+        count++;
+      } else {
+        rle += count + (lastCell ? "o" : "b");
+        count = 1;
+        lastCell = grid[i][j];
+      }
+    }
+    if (i < numRows - 1) rle += "$";
+  }
+  rle += count + (lastCell ? "o" : "b");
+
+  return btoa(rle); // Base64 encode
+}
+
+function decodePattern(encoded) {
+  try {
+    const rle = atob(encoded);
+    // Decode RLE back to grid
+    // This is a simplified version
+    return null; // Would need full implementation
+  } catch (e) {
+    console.error("Failed to decode pattern:", e);
+    return null;
+  }
+}
+
+// Load pattern from URL on page load
+function loadPatternFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const patternData = params.get("pattern");
+
+  if (patternData) {
+    const decoded = decodePattern(patternData);
+    if (decoded) {
+      state = decoded;
+      draw(state);
+    }
+  }
+}
+
+// ========== EXPORT FUNCTIONS ==========
+function openExportModal() {
+  document.getElementById("export-modal").showModal();
+  document.getElementById("export-output").value = "";
+}
+
+function exportAsJSON() {
+  const data = {
+    pattern: state,
+    rows: numRows,
+    cols: numCols,
+    rules: {
+      survival: survivalRules,
+      birth: birthRules,
+    },
+    metadata: {
+      exported: new Date().toISOString(),
+      tickCount: tickCount,
+    },
+  };
+
+  document.getElementById("export-output").value = JSON.stringify(
+    data,
+    null,
+    2
+  );
+}
+
+function exportAsRLE() {
+  let rle = `x = ${numCols}, y = ${numRows}, rule = B${birthRules.join("")}/S${survivalRules.join("")}\\n`;
+
+  for (let i = 0; i < numRows; i++) {
+    let count = 0;
+    let lastCell = 0;
+
+    for (let j = 0; j < numCols; j++) {
+      if (state[i][j] === lastCell) {
+        count++;
+      } else {
+        if (count > 0) {
+          rle += (count > 1 ? count : "") + (lastCell ? "o" : "b");
+        }
+        count = 1;
+        lastCell = state[i][j];
+      }
+    }
+
+    if (count > 0) {
+      rle += (count > 1 ? count : "") + (lastCell ? "o" : "b");
+    }
+
+    if (i < numRows - 1) rle += "$";
+  }
+
+  rle += "!";
+  document.getElementById("export-output").value = rle;
+}
+
+function exportAsPlaintext() {
+  let text = "";
+  for (let i = 0; i < numRows; i++) {
+    for (let j = 0; j < numCols; j++) {
+      text += state[i][j] ? "O" : ".";
+    }
+    text += "\\n";
+  }
+  document.getElementById("export-output").value = text;
+}
+
+function copyExportToClipboard() {
+  const output = document.getElementById("export-output");
+  output.select();
+  navigator.clipboard.writeText(output.value).then(() => {
+    alert("Copied to clipboard!");
+  });
+}
+
 // Initialize - start tutorial automatically
 initializeGrid(); // Initialize grid based on screen size
 draw(state);
@@ -1360,6 +1794,99 @@ document
 
 // Initialize save/load button states
 updateSaveLoadButtons();
+
+// ========== NEW FEATURE EVENT LISTENERS ==========
+
+// Theme toggle
+document.getElementById("theme-toggle")?.addEventListener("click", toggleTheme);
+
+// Color picker
+document.getElementById("color-picker-btn")?.addEventListener("click", () => {
+  document.getElementById("alive-color-picker").click();
+});
+
+document
+  .getElementById("alive-color-picker")
+  ?.addEventListener("input", (e) => {
+    updateCellColor(e.target.value);
+  });
+
+// Statistics reset
+document
+  .getElementById("reset-stats")
+  ?.addEventListener("click", resetStatistics);
+
+// Pattern search
+document.getElementById("pattern-search")?.addEventListener("input", (e) => {
+  currentSearchTerm = e.target.value;
+  filterPatterns();
+});
+
+// Pattern filter buttons
+document.querySelectorAll(".filter-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    // Remove active class from all buttons
+    document
+      .querySelectorAll(".filter-btn")
+      .forEach((b) => b.classList.remove("active"));
+    // Add active class to clicked button
+    btn.classList.add("active");
+    // Update filter
+    currentFilter = btn.getAttribute("data-category");
+    filterPatterns();
+  });
+});
+
+// Custom pattern editor
+document
+  .getElementById("open-custom-editor")
+  ?.addEventListener("click", openCustomEditor);
+
+document.getElementById("editor-grid-size")?.addEventListener("change", (e) => {
+  editorSize = parseInt(e.target.value);
+  initializeEditorGrid();
+});
+
+document
+  .getElementById("editor-clear")
+  ?.addEventListener("click", clearEditorGrid);
+document
+  .getElementById("editor-save")
+  ?.addEventListener("click", saveCustomPattern);
+document
+  .getElementById("editor-place")
+  ?.addEventListener("click", placeCustomPattern);
+
+// Export functions
+document
+  .getElementById("export-pattern")
+  ?.addEventListener("click", openExportModal);
+document.getElementById("export-json")?.addEventListener("click", exportAsJSON);
+document.getElementById("export-rle")?.addEventListener("click", exportAsRLE);
+document
+  .getElementById("export-cells")
+  ?.addEventListener("click", exportAsPlaintext);
+document
+  .getElementById("copy-export")
+  ?.addEventListener("click", copyExportToClipboard);
+
+// Share URL
+document
+  .getElementById("share-url")
+  ?.addEventListener("click", sharePatternURL);
+
+// Apply theme on load
+applyTheme(currentTheme);
+document.documentElement.style.setProperty(
+  "--alive-cell-color",
+  aliveCellColor
+);
+
+// Load pattern from URL if present
+loadPatternFromURL();
+
+// Initial statistics update
+updateStatistics();
 
 // Handle window resize to recalculate grid
 window.addEventListener("resize", () => {

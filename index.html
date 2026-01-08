@@ -123,6 +123,26 @@
         aria-label="Game rules and customization"
       >
         <h2>Rules</h2>
+
+        <!-- Theme Controls -->
+        <div class="theme-controls">
+          <h3>Theme Settings</h3>
+          <div class="theme-buttons">
+            <button id="theme-toggle" aria-label="Toggle dark/light mode"
+              >🌓 Toggle Theme</button
+            >
+            <button id="color-picker-btn" aria-label="Choose cell color"
+              >🎨 Cell Color</button
+            >
+          </div>
+          <input
+            type="color"
+            id="alive-color-picker"
+            value="#efe9e9"
+            style="display: none"
+          />
+        </div>
+
         <div class="rules-customization">
           <h3>Customize Rules</h3>
           <div class="rule-input">
@@ -155,6 +175,31 @@
             >Apply Rules</button
           >
         </div>
+
+        <!-- Statistics Dashboard -->
+        <div class="statistics-dashboard">
+          <h3>Statistics</h3>
+          <div class="stat-item">
+            <span class="stat-label">Population:</span>
+            <span id="stat-population" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Births:</span>
+            <span id="stat-births" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Deaths:</span>
+            <span id="stat-deaths" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Peak Pop:</span>
+            <span id="stat-peak" class="stat-value">0</span>
+          </div>
+          <button id="reset-stats" aria-label="Reset statistics"
+            >Reset Stats</button
+          >
+        </div>
+
         <h3>Current Rules</h3>
         <ul id="current-rules">
           <li
@@ -221,6 +266,23 @@
               >🗑️ Clear Saved</button
             >
           </div>
+          <div
+            class="advanced-controls"
+            role="group"
+            aria-label="Advanced features"
+          >
+            <button id="export-pattern" aria-label="Export current pattern"
+              >📥 Export</button
+            >
+            <button id="share-url" aria-label="Share pattern via URL"
+              >🔗 Share URL</button
+            >
+            <button
+              id="open-custom-editor"
+              aria-label="Open custom pattern editor"
+              >✏️ Custom Editor</button
+            >
+          </div>
         </div>
       </section>
       <aside
@@ -244,6 +306,38 @@
     <p class="click-instruction" role="note"
       >Click any pattern to add it to the game!</p
     >
+
+    <!-- Pattern Search and Filter -->
+    <div
+      class="pattern-search-container"
+      role="region"
+      aria-label="Pattern search and filter"
+    >
+      <input
+        type="text"
+        id="pattern-search"
+        placeholder="🔍 Search patterns..."
+        aria-label="Search patterns by name"
+      />
+      <div class="pattern-filter-buttons">
+        <button class="filter-btn active" data-category="all">All</button>
+        <button class="filter-btn" data-category="spaceships"
+          >🚀 Spaceships</button
+        >
+        <button class="filter-btn" data-category="oscillators"
+          >🔄 Oscillators</button
+        >
+        <button class="filter-btn" data-category="stilllifes"
+          >🔸 Still Lifes</button
+        >
+        <button class="filter-btn" data-category="generators"
+          >⚡ Generators</button
+        >
+        <button class="filter-btn" data-category="methuselahs"
+          >🧬 Methuselahs</button
+        >
+      </div>
+    </div>
 
     <section
       class="spaceship-patterns"
@@ -487,6 +581,66 @@
         </form>
         <h3 class="text-lg font-bold">Spaceship Added</h3>
         <p class="py-4" id="ship-added-message">Added spaceship!</p>
+      </div>
+    </dialog>
+
+    <!-- Custom Pattern Editor Modal -->
+    <dialog id="custom-editor-modal" class="modal custom-editor-modal">
+      <div class="modal-box editor-modal-box">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >✕</button
+          >
+        </form>
+        <h3 class="text-lg font-bold">Custom Pattern Editor</h3>
+        <div class="editor-controls">
+          <label for="pattern-name">Pattern Name:</label>
+          <input
+            type="text"
+            id="pattern-name"
+            placeholder="My Pattern"
+            maxlength="30"
+          />
+          <label for="grid-size">Grid Size:</label>
+          <select id="editor-grid-size">
+            <option value="5">5x5</option>
+            <option value="8" selected>8x8</option>
+            <option value="10">10x10</option>
+            <option value="15">15x15</option>
+            <option value="20">20x20</option>
+          </select>
+        </div>
+        <div id="pattern-editor-grid" class="pattern-editor-grid"></div>
+        <div class="editor-actions">
+          <button id="editor-clear">Clear</button>
+          <button id="editor-save">Save Pattern</button>
+          <button id="editor-place">Place on Grid</button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Export Modal -->
+    <dialog id="export-modal" class="modal">
+      <div class="modal-box">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >✕</button
+          >
+        </form>
+        <h3 class="text-lg font-bold">Export Pattern</h3>
+        <div class="export-options">
+          <button id="export-json" class="export-btn">📄 Export as JSON</button>
+          <button id="export-rle" class="export-btn">📝 Export as RLE</button>
+          <button id="export-cells" class="export-btn"
+            >📋 Export as Plaintext</button
+          >
+        </div>
+        <textarea
+          id="export-output"
+          readonly
+          placeholder="Export data will appear here..."
+        ></textarea>
+        <button id="copy-export" class="copy-btn">📋 Copy to Clipboard</button>
       </div>
     </dialog>
 

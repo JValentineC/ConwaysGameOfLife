@@ -60,6 +60,17 @@ class AuthSystem {
       throw new Error("Password must be at least 6 characters long");
     }
 
+    // Check password strength
+    const strength = this.checkPasswordStrength(password);
+    if (strength.score < 2) {
+      throw new Error(`Password too weak: ${strength.feedback.join(", ")}`);
+    }
+
+    // Validate email if provided
+    if (email && !this.validateEmail(email)) {
+      throw new Error("Invalid email address");
+    }
+
     const users = this.getAllUsers();
 
     if (users[username]) {
@@ -69,7 +80,7 @@ class AuthSystem {
     // Create new user
     const newUser = {
       username,
-      password: this.hashPassword(password), // Simple hash for demo
+      password: this.hashPassword(password), // Enhanced hash
       email,
       createdAt: new Date().toISOString(),
       lastLogin: null,
@@ -209,13 +220,134 @@ class AuthSystem {
 
   // Simple password hashing (for demo purposes - use proper hashing in production)
   hashPassword(password) {
+    // More robust hashing using multiple rounds
     let hash = 0;
-    for (let i = 0; i < password.length; i++) {
-      const char = password.charCodeAt(i);
+    const salt = "GameOfLife2026"; // Simple salt for demo
+    const combined = salt + password + salt;
+
+    for (let i = 0; i < combined.length; i++) {
+      const char = combined.charCodeAt(i);
       hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
-    return hash.toString();
+
+    // Additional hashing round
+    let hash2 = hash;
+    for (let i = 0; i < 3; i++) {
+      hash2 = (hash2 << 3) - hash2 + hash;
+      hash2 = hash2 & hash2;
+    }
+
+    return hash2.toString(36); // Base-36 encoding for shorter string
+  }
+
+  // Check password strength
+  checkPasswordStrength(password) {
+    let score = 0;
+    const feedback = [];
+
+    // Length check
+    if (password.length >= 8) score++;
+    if (password.length >= 12) score++;
+    if (password.length < 8) feedback.push("use at least 8 characters");
+
+    // Character variety checks
+    if (/[a-z]/.test(password)) score++;
+    else feedback.push("include lowercase letters");
+
+    if (/[A-Z]/.test(password)) score++;
+    else feedback.push("include uppercase letters");
+
+    if (/[0-9]/.test(password)) score++;
+    else feedback.push("include numbers");
+
+    if (/[^a-zA-Z0-9]/.test(password)) score++;
+    else feedback.push("include special characters");
+
+    // Common patterns check
+    const commonPatterns = ["123456", "password", "qwerty", "abc123"];
+    if (
+      commonPatterns.some((pattern) => password.toLowerCase().includes(pattern))
+    ) {
+      score = Math.max(0, score - 2);
+      feedback.push("avoid common patterns");
+    }
+
+    return {
+      score: Math.min(5, score),
+      strength: score < 2 ? "weak" : score < 4 ? "medium" : "strong",
+      feedback,
+    };
+  }
+
+  // Email validation
+  validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  // Password reset request (stores reset token)
+  requestPasswordReset(username) {
+    const users = this.getAllUsers();
+    const user = users[username];
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (!user.email) {
+      throw new Error("No email associated with this account");
+    }
+
+    // Generate simple reset token
+    const resetToken = Math.random().toString(36).substring(2, 15);
+    user.resetToken = resetToken;
+    user.resetTokenExpiry = Date.now() + 3600000; // 1 hour
+
+    this.saveAllUsers(users);
+
+    // In a real app, this would send an email
+    return {
+      success: true,
+      message: "Password reset instructions sent to email",
+      token: resetToken, // For demo purposes only!
+    };
+  }
+
+  // Reset password with token
+  resetPassword(username, token, newPassword) {
+    const users = this.getAllUsers();
+    const user = users[username];
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (!user.resetToken || user.resetToken !== token) {
+      throw new Error("Invalid reset token");
+    }
+
+    if (Date.now() > user.resetTokenExpiry) {
+      throw new Error("Reset token has expired");
+    }
+
+    if (newPassword.length < 6) {
+      throw new Error("Password must be at least 6 characters long");
+    }
+
+    // Check password strength
+    const strength = this.checkPasswordStrength(newPassword);
+    if (strength.score < 2) {
+      throw new Error(`Password too weak: ${strength.feedback.join(", ")}`);
+    }
+
+    user.password = this.hashPassword(newPassword);
+    delete user.resetToken;
+    delete user.resetTokenExpiry;
+
+    this.saveAllUsers(users);
+
+    return { success: true, message: "Password reset successfully" };
   }
 
   // Create authentication UI
@@ -254,6 +386,10 @@ class AuthSystem {
             <input type="text" id="register-username" placeholder="Username" required>
             <input type="email" id="register-email" placeholder="Email (optional)">
             <input type="password" id="register-password" placeholder="Password" required>
+            <div class="password-strength-indicator">
+              <div id="password-strength-bar" class="strength-bar"></div>
+              <small id="password-strength-text"></small>
+            </div>
             <input type="password" id="register-confirm" placeholder="Confirm Password" required>
             <button type="submit" class="auth-btn">Register</button>
           </form>
@@ -368,6 +504,37 @@ class AuthSystem {
     document
       .getElementById("update-email-form")
       .addEventListener("submit", (e) => this.handleUpdateEmail(e));
+
+    // Password strength indicator
+    document
+      .getElementById("register-password")
+      ?.addEventListener("input", (e) =>
+        this.updatePasswordStrength(e.target.value)
+      );
+  }
+
+  // Update password strength indicator
+  updatePasswordStrength(password) {
+    const strengthResult = this.checkPasswordStrength(password);
+    const bar = document.getElementById("password-strength-bar");
+    const text = document.getElementById("password-strength-text");
+
+    if (!bar || !text) return;
+
+    // Update bar
+    bar.className = `strength-bar strength-${strengthResult.strength}`;
+    bar.style.width = `${(strengthResult.score / 5) * 100}%`;
+
+    // Update text
+    if (password.length === 0) {
+      text.textContent = "";
+      bar.style.width = "0%";
+    } else {
+      text.textContent = `Password strength: ${strengthResult.strength}`;
+      if (strengthResult.feedback.length > 0 && strengthResult.score < 4) {
+        text.textContent += ` (${strengthResult.feedback[0]})`;
+      }
+    }
   }
 
   // Show login form

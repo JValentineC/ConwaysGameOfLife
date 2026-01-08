@@ -1,6 +1,7 @@
 :root {
   --cell-size: 12px;
   --cell-gap: 1px;
+  --alive-cell-color: #efe9e9;
 }
 
 #game {
@@ -23,7 +24,7 @@
 }
 
 .cell.alive {
-  background: #efe9e9;
+  background: var(--alive-cell-color);
 }
 
 body {
@@ -452,6 +453,409 @@ body {
 #clear-saved:hover:not(:disabled) {
   background: #dc3545;
   box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Advanced controls */
+.advanced-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.advanced-controls button {
+  padding: 8px 16px;
+  background: rgba(138, 43, 226, 0.8);
+  border: 2px solid #8a2be2;
+  color: white;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.advanced-controls button:hover:not(:disabled) {
+  background: #8a2be2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(138, 43, 226, 0.3);
+}
+
+/* Theme Controls */
+.theme-controls {
+  background: rgba(255, 215, 0, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.theme-controls h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #ffd700;
+  font-size: 1.1rem;
+}
+
+.theme-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.theme-buttons button {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px;
+  background: rgba(255, 215, 0, 0.2);
+  border: 2px solid #ffd700;
+  color: #ffd700;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-buttons button:hover {
+  background: #ffd700;
+  color: black;
+}
+
+/* Light theme styles */
+body.light-theme {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+body.light-theme .title {
+  color: #333;
+}
+
+body.light-theme .game-rules,
+body.light-theme .game-history {
+  color: #333;
+}
+
+body.light-theme .cell {
+  background: #e0e0e0;
+  border-color: #ccc;
+}
+
+body.light-theme .rules-customization,
+body.light-theme .theme-controls,
+body.light-theme .statistics-dashboard {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme input,
+body.light-theme select,
+body.light-theme textarea {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  border-color: #999;
+}
+
+body.light-theme .modal-box {
+  background: #fff;
+  color: #333;
+  border-color: #ffd700;
+}
+
+body.light-theme .pattern-category-header {
+  background: rgba(255, 215, 0, 0.1);
+  border-color: rgba(255, 215, 0, 0.4);
+}
+
+/* Statistics Dashboard */
+.statistics-dashboard {
+  background: rgba(138, 43, 226, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(138, 43, 226, 0.3);
+}
+
+.statistics-dashboard h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #8a2be2;
+  font-size: 1.1rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item:last-of-type {
+  border-bottom: none;
+  margin-bottom: 10px;
+}
+
+.stat-label {
+  font-weight: 600;
+  color: #ddd;
+}
+
+.stat-value {
+  font-weight: bold;
+  color: #8a2be2;
+  font-size: 1.1rem;
+}
+
+#reset-stats {
+  width: 100%;
+  padding: 8px;
+  background: rgba(220, 53, 69, 0.8);
+  border: 2px solid #dc3545;
+  color: white;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 5px;
+}
+
+#reset-stats:hover {
+  background: #dc3545;
+}
+
+/* Pattern Search and Filter */
+.pattern-search-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+#pattern-search {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: 2px solid #ffd700;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+#pattern-search:focus {
+  outline: none;
+  border-color: #ffed4e;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+#pattern-search::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.pattern-filter-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.filter-btn {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.filter-btn:hover {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: #ffd700;
+}
+
+.filter-btn.active {
+  background: #ffd700;
+  color: black;
+  border-color: #ffd700;
+}
+
+/* Hide patterns when filtered */
+.ship-display.hidden-by-filter {
+  display: none !important;
+}
+
+/* Custom Pattern Editor Modal */
+.custom-editor-modal {
+  max-width: 600px;
+}
+
+.editor-modal-box {
+  max-width: 550px;
+  width: 95%;
+}
+
+.editor-controls {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.editor-controls label {
+  font-weight: bold;
+  color: #ffd700;
+}
+
+.editor-controls input,
+.editor-controls select {
+  padding: 8px;
+  border: 2px solid #555;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.pattern-editor-grid {
+  display: grid;
+  gap: 2px;
+  justify-content: center;
+  background: #2c0202;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  max-height: 400px;
+  overflow: auto;
+}
+
+.editor-cell {
+  width: 25px;
+  height: 25px;
+  background: #5b0202;
+  border: 1px solid #2c0202;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.editor-cell:hover {
+  opacity: 0.7;
+}
+
+.editor-cell.alive {
+  background: #efe9e9;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.editor-actions button {
+  flex: 1;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 4px;
+  border: 2px solid;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#editor-clear {
+  background: rgba(220, 53, 69, 0.8);
+  border-color: #dc3545;
+  color: white;
+}
+
+#editor-clear:hover {
+  background: #dc3545;
+}
+
+#editor-save {
+  background: rgba(0, 123, 255, 0.8);
+  border-color: #007bff;
+  color: white;
+}
+
+#editor-save:hover {
+  background: #007bff;
+}
+
+#editor-place {
+  background: rgba(40, 167, 69, 0.8);
+  border-color: #28a745;
+  color: white;
+}
+
+#editor-place:hover {
+  background: #28a745;
+}
+
+/* Export Modal */
+.export-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.export-btn {
+  padding: 12px;
+  background: rgba(0, 123, 255, 0.8);
+  border: 2px solid #007bff;
+  color: white;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.export-btn:hover {
+  background: #007bff;
+  transform: translateX(5px);
+}
+
+#export-output {
+  width: 100%;
+  min-height: 150px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid #555;
+  border-radius: 4px;
+  color: white;
+  font-family: "Courier New", monospace;
+  font-size: 0.9rem;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+
+.copy-btn {
+  width: 100%;
+  padding: 10px;
+  background: rgba(40, 167, 69, 0.8);
+  border: 2px solid #28a745;
+  color: white;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+  background: #28a745;
+}
+
+.copy-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .rules-customization {
@@ -1021,6 +1425,64 @@ body {
   .save-load-controls button {
     width: 100%;
   }
+
+  /* Responsive advanced controls */
+  .advanced-controls {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .advanced-controls button {
+    width: 100%;
+  }
+
+  /* Responsive theme controls */
+  .theme-buttons {
+    flex-direction: column;
+  }
+
+  .theme-buttons button {
+    width: 100%;
+  }
+
+  /* Responsive statistics */
+  .statistics-dashboard {
+    font-size: 0.9rem;
+  }
+
+  /* Responsive pattern search */
+  .pattern-search-container {
+    padding: 15px;
+  }
+
+  .pattern-filter-buttons {
+    gap: 8px;
+  }
+
+  .filter-btn {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+
+  /* Responsive editor */
+  .editor-modal-box {
+    width: 95%;
+    max-width: 100%;
+  }
+
+  .editor-cell {
+    width: 20px;
+    height: 20px;
+  }
+
+  .editor-actions {
+    flex-direction: column;
+  }
+
+  .editor-actions button {
+    width: 100%;
+  }
 }
 
 /* Make controls easier to tap */
@@ -1507,6 +1969,37 @@ button,
 
 .auth-form input::placeholder {
   color: #aaa;
+}
+
+/* Password Strength Indicator */
+.password-strength-indicator {
+  margin: -10px 0 0 0;
+}
+
+.strength-bar {
+  height: 4px;
+  width: 0%;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  margin-bottom: 5px;
+}
+
+.strength-bar.strength-weak {
+  background: #dc3545;
+}
+
+.strength-bar.strength-medium {
+  background: #ffa500;
+}
+
+.strength-bar.strength-strong {
+  background: #28a745;
+}
+
+.password-strength-indicator small {
+  font-size: 0.85rem;
+  color: #ccc;
+  display: block;
 }
 
 .auth-btn {

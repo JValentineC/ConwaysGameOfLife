@@ -19,7 +19,8 @@ export function renderPatterns(allPatterns, onPatternSelect) {
   const filteredPatterns = filterPatterns(allPatterns);
 
   if (Object.keys(filteredPatterns).length === 0) {
-    container.innerHTML = '<p class="text-center text-gray-500">No patterns found</p>';
+    container.innerHTML =
+      '<p class="text-center text-gray-500">No patterns found</p>';
     return;
   }
 

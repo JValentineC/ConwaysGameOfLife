@@ -16,7 +16,10 @@ export function initializeTheme() {
   }
 
   if (savedColor) {
-    document.documentElement.style.setProperty("--alive-cell-color", savedColor);
+    document.documentElement.style.setProperty(
+      "--alive-cell-color",
+      savedColor
+    );
     const colorPicker = document.getElementById("color-picker");
     if (colorPicker) colorPicker.value = savedColor;
   }
@@ -51,6 +54,8 @@ export function setupThemeListeners() {
   }
 
   if (colorPicker) {
-    colorPicker.addEventListener("input", (e) => updateCellColor(e.target.value));
+    colorPicker.addEventListener("input", (e) =>
+      updateCellColor(e.target.value)
+    );
   }
 }

@@ -210,36 +210,36 @@ export const spaceshipPatterns = {
 
 // Pattern categories for filtering
 export const patternCategories = {
-  glider: 'spaceships',
-  lwss: 'spaceships',
-  mwss: 'spaceships',
-  hwss: 'spaceships',
-  copperhead: 'spaceships',
-  pufferfish: 'spaceships',
-  Weekender: 'spaceships',
-  blinker: 'oscillators',
-  toad: 'oscillators',
-  beacon: 'oscillators',
-  pulsar: 'oscillators',
-  Galaxy: 'oscillators',
-  block: 'stilllifes',
-  beehive: 'stilllifes',
-  loaf: 'stilllifes',
-  boat: 'stilllifes',
-  glidergun: 'generators',
-  acorn: 'methuselahs',
-  diehard: 'methuselahs'
+  glider: "spaceships",
+  lwss: "spaceships",
+  mwss: "spaceships",
+  hwss: "spaceships",
+  copperhead: "spaceships",
+  pufferfish: "spaceships",
+  Weekender: "spaceships",
+  blinker: "oscillators",
+  toad: "oscillators",
+  beacon: "oscillators",
+  pulsar: "oscillators",
+  Galaxy: "oscillators",
+  block: "stilllifes",
+  beehive: "stilllifes",
+  loaf: "stilllifes",
+  boat: "stilllifes",
+  glidergun: "generators",
+  acorn: "methuselahs",
+  diehard: "methuselahs",
 };
 
 // Custom patterns storage key
-export const CUSTOM_PATTERNS_KEY = 'gameOfLifeCustomPatterns';
+export const CUSTOM_PATTERNS_KEY = "gameOfLifeCustomPatterns";
 
 /**
  * Load custom patterns from localStorage
  * @returns {Object} Custom patterns object
  */
 export function loadCustomPatterns() {
-  return JSON.parse(localStorage.getItem(CUSTOM_PATTERNS_KEY) || '{}');
+  return JSON.parse(localStorage.getItem(CUSTOM_PATTERNS_KEY) || "{}");
 }
 
 /**

@@ -69,12 +69,12 @@
       aria-label="Mobile game controls"
     >
       <div class="mobile-game-controls">
-        <button id="mobile-start" aria-label="Start simulation">Start</button>
-        <button id="mobile-stop" aria-label="Stop simulation">Stop</button>
-        <button id="mobile-reset" aria-label="Reset grid">Reset</button>
-        <button id="mobile-fullscreen" aria-label="Toggle fullscreen mode"
-          >Fullscreen</button
-        >
+        <button id="mobile-start" class="icon-btn-mobile" aria-label="Start simulation" title="Start">▶️</button>
+        <button id="mobile-stop" class="icon-btn-mobile" aria-label="Stop simulation" title="Stop">⏸️</button>
+        <button id="mobile-reset" class="icon-btn-mobile" aria-label="Reset grid" title="Reset">🔄</button>
+        <button id="mobile-clear" class="icon-btn-mobile" aria-label="Clear grid" title="Clear">🗑️</button>
+        <button id="mobile-randomize" class="icon-btn-mobile" aria-label="Randomize" title="Randomize">🎲</button>
+        <button id="mobile-fullscreen" class="icon-btn-mobile" aria-label="Toggle fullscreen mode" title="Fullscreen">⛶</button>
       </div>
 
       <div
@@ -98,7 +98,9 @@
       </div>
 
       <div class="mobile-rules-toggle">
-        <button id="toggle-rules">Rules & Settings</button>
+        <button id="toggle-rules" class="mobile-collapse-btn" aria-expanded="false">
+          <span class="expand-icon">▼</span> Settings & Info
+        </button>
       </div>
     </div>
 
@@ -118,11 +120,15 @@
 
     <main id="main-content" class="main-layout">
       <aside
-        class="game-rules"
+        class="game-rules collapsible-section"
         role="complementary"
         aria-label="Game rules and customization"
       >
-        <h2>Rules</h2>
+        <button class="collapse-toggle" aria-expanded="true" aria-controls="rules-content">
+          <span class="collapse-icon">◀</span>
+          <h2>Settings</h2>
+        </button>
+        <div id="rules-content" class="collapsible-content">
 
         <!-- Theme Controls -->
         <div class="theme-controls">
@@ -219,12 +225,13 @@
             cell (reproduction).</li
           >
         </ul>
+        </div>
       </aside>
       <section class="game-center" role="main" aria-label="Game simulation">
         <div class="game-status-bar">
           <span id="tick-counter" aria-live="polite">Tick: 0</span>
           <div class="speed-control">
-            <label for="speed-slider">Speed:</label>
+            <span class="speed-icon" title="Slower">🐢</span>
             <input
               type="range"
               id="speed-slider"
@@ -237,60 +244,49 @@
               aria-valuenow="5"
             />
             <span id="speed-value" aria-live="polite">5x</span>
+            <span class="speed-icon" title="Faster">🐇</span>
           </div>
         </div>
         <div class="container">
           <div id="game" role="grid" aria-label="Game of Life grid"></div>
           <div class="control-buttons" role="group" aria-label="Game controls">
-            <button id="start" aria-label="Start simulation">Start</button>
-            <button id="stop" aria-label="Stop simulation">Stop</button>
-            <button id="reset" aria-label="Reset grid to initial state"
-              >Reset</button
-            >
-            <button id="toggle-fullscreen" aria-label="Toggle fullscreen mode"
-              >Fullscreen</button
-            >
+            <button id="start" class="icon-btn" aria-label="Start simulation" title="Start">▶️</button>
+            <button id="stop" class="icon-btn" aria-label="Stop simulation" title="Stop">⏸️</button>
+            <button id="reset" class="icon-btn" aria-label="Reset grid to initial state" title="Reset">🔄</button>
+            <button id="clear" class="icon-btn" aria-label="Clear grid" title="Clear">🗑️</button>
+            <button id="randomize" class="icon-btn" aria-label="Randomize grid" title="Randomize">🎲</button>
+            <button id="toggle-fullscreen" class="icon-btn" aria-label="Toggle fullscreen mode" title="Fullscreen">⛶</button>
           </div>
           <div
             class="save-load-controls"
             role="group"
             aria-label="Save and load controls"
           >
-            <button id="save-state" aria-label="Save current grid state"
-              >💾 Save State</button
-            >
-            <button id="load-state" aria-label="Load saved grid state" disabled
-              >📂 Load State</button
-            >
-            <button id="clear-saved" aria-label="Clear saved states" disabled
-              >🗑️ Clear Saved</button
-            >
+            <button id="save-state" class="icon-btn" aria-label="Save current grid state" title="Save">💾</button>
+            <button id="load-state" class="icon-btn" aria-label="Load saved grid state" title="Load" disabled>📂</button>
+            <button id="clear-saved" class="icon-btn" aria-label="Clear saved states" title="Clear Saves" disabled>🗑️</button>
           </div>
           <div
             class="advanced-controls"
             role="group"
             aria-label="Advanced features"
           >
-            <button id="export-pattern" aria-label="Export current pattern"
-              >📥 Export</button
-            >
-            <button id="share-url" aria-label="Share pattern via URL"
-              >🔗 Share URL</button
-            >
-            <button
-              id="open-custom-editor"
-              aria-label="Open custom pattern editor"
-              >✏️ Custom Editor</button
-            >
+            <button id="export-btn" class="icon-btn" aria-label="Export current pattern" title="Export">📥</button>
+            <button id="share-url" class="icon-btn" aria-label="Share pattern via URL" title="Share">🔗</button>
+            <button id="custom-editor-btn" class="icon-btn" aria-label="Open custom pattern editor" title="Editor">✏️</button>
           </div>
         </div>
       </section>
       <aside
-        class="game-history"
+        class="game-history collapsible-section"
         role="complementary"
         aria-label="History and information"
       >
-        <h2>History</h2>
+        <button class="collapse-toggle" aria-expanded="true" aria-controls="history-content">
+          <span class="collapse-icon">▶</span>
+          <h2>History</h2>
+        </button>
+        <div id="history-content" class="collapsible-content">
         <p>
           The Game of Life, devised by mathematician John Horton Conway in 1970,
           is a cellular automaton that simulates the evolution of simple
@@ -300,6 +296,7 @@
           simple rules, and it has inspired research in mathematics, computer
           science, and artificial life.
         </p>
+        </div>
       </aside>
     </main>
 

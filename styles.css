@@ -67,7 +67,7 @@ body {
 
 .mobile-game-controls {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -82,6 +82,14 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.9rem;
+}
+
+.mobile-game-controls .icon-btn-mobile {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-size: 18px;
+  border-radius: 50%;
 }
 
 .mobile-game-controls button:hover {
@@ -315,13 +323,27 @@ body {
 .speed-control {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   white-space: nowrap;
+}
+
+.speed-icon {
+  font-size: 1.2rem;
+  opacity: 0.7;
+  cursor: default;
 }
 
 .speed-control label {
   font-weight: bold;
   color: #fff;
+  font-size: 0.9rem;
+}
+
+#speed-value {
+  min-width: 35px;
+  text-align: center;
+  font-weight: bold;
+  color: #ffd700;
   font-size: 0.9rem;
 }
 
@@ -384,13 +406,67 @@ body {
 /* Control buttons styling */
 .control-buttons {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   margin-top: 10px;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.control-buttons button {
+/* Icon buttons - compact design */
+.icon-btn {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  background: transparent;
+  border: 2px solid #ffd700;
+  color: #ffd700;
+  font-size: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn:hover:not(:disabled) {
+  background: #ffd700;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+.icon-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.icon-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Mobile icon buttons */
+.icon-btn-mobile {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 2px solid #ffd700;
+  color: #ffd700;
+  font-size: 18px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn-mobile:hover {
+  background: #ffd700;
+  transform: scale(1.05);
+}
+
+.control-buttons button:not(.icon-btn) {
   padding: 10px 20px;
   background: transparent;
   border: 2px solid #ffd700;
@@ -401,14 +477,99 @@ body {
   transition: all 0.3s ease;
 }
 
-.control-buttons button:hover:not(:disabled) {
+.control-buttons button:not(.icon-btn):hover:not(:disabled) {
+.control-buttons button:not(.icon-btn):hover:not(:disabled) {
   background: #ffd700;
   color: black;
 }
 
-.control-buttons button:disabled {
+.control-buttons button:not(.icon-btn):disabled {
+.control-buttons button:not(.icon-btn):disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Collapsible sections */
+.collapsible-section {
+  position: relative;
+  transition: width 0.3s ease;
+}
+
+.collapse-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 215, 0, 0.1);
+  border: none;
+  color: #ffd700;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.collapse-toggle:hover {
+  background: rgba(255, 215, 0, 0.2);
+}
+
+.collapse-toggle h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  flex: 1;
+  text-align: left;
+}
+
+.collapse-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.collapse-toggle[aria-expanded="false"] .collapse-icon {
+  transform: rotate(-90deg);
+}
+
+.collapsible-content {
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 1;
+}
+
+.collapsible-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* Mobile collapse button */
+.mobile-collapse-btn {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 215, 0, 0.1);
+  border: 2px solid #ffd700;
+  color: #ffd700;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.mobile-collapse-btn:hover {
+  background: rgba(255, 215, 0, 0.2);
+}
+
+.expand-icon {
+  font-size: 0.9rem;
+  transition: transform 0.3s ease;
+}
+
+.mobile-collapse-btn[aria-expanded="true"] .expand-icon {
+  transform: rotate(180deg);
 }
 
 /* Save/Load controls */
@@ -1307,17 +1468,29 @@ body.light-theme .pattern-category-header {
     display: flex;
   }
 
-  /* Hide desktop pattern gallery and category headers */
+  /* Keep pattern gallery visible but make scrollable */
   .spaceship-patterns {
-    display: none;
+    padding: 15px 10px;
+    max-height: 60vh;
+    overflow-y: auto;
   }
 
   .pattern-category-header {
-    display: none;
+    padding: 15px 10px;
+    margin: 20px 0 15px 0;
+  }
+
+  .pattern-category-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .pattern-category-header p {
+    font-size: 0.85rem;
   }
 
   .click-instruction {
-    display: none;
+    font-size: 0.9rem;
+    padding: 10px;
   }
 
   /* Collapse rules section by default on mobile */
@@ -1328,10 +1501,17 @@ body.light-theme .pattern-category-header {
   .game-rules.mobile-expanded {
     display: block;
     order: 3;
+    width: 100%;
   }
 
   .game-history {
     display: none;
+  }
+
+  .game-history.mobile-expanded {
+    display: block;
+    order: 4;
+    width: 100%;
   }
 
   /* Adjust main layout for mobile */
@@ -1348,9 +1528,53 @@ body.light-theme .pattern-category-header {
     align-items: center;
   }
 
-  /* Hide desktop controls */
-  .game-center > .container > div {
+  /* Show game grid but hide other desktop controls */
+  .game-center #game {
+    display: grid !important;
+  }
+
+  /* Hide most desktop-only buttons on mobile */
+  .game-center .control-buttons,
+  .save-load-controls,
+  .advanced-controls {
     display: none;
+  }
+
+  /* Make game status bar more compact */
+  .game-status-bar {
+    flex-wrap: wrap;
+    padding: 8px;
+    gap: 10px;
+  }
+
+  #tick-counter {
+    font-size: 0.9rem;
+    flex: 1;
+  }
+
+  .speed-control {
+    gap: 6px;
+  }
+
+  .speed-icon {
+    font-size: 1rem;
+  }
+
+  #speed-slider {
+    width: 80px;
+  }
+
+  /* Smaller pattern cards on mobile */
+  .ship-display {
+    padding: 12px;
+  }
+
+  .ship-display h4 {
+    font-size: 1rem;
+  }
+
+  .ship-display p {
+    font-size: 0.85rem;
   }
 }
 

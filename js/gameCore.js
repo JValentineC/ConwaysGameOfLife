@@ -101,7 +101,9 @@ function calculateFullscreenGridSize() {
  * @returns {Array} 2D array representing the grid
  */
 export function generateInitialState() {
-  const initialState = Array.from({ length: numRows }, () => Array(numCols).fill(0));
+  const initialState = Array.from({ length: numRows }, () =>
+    Array(numCols).fill(0)
+  );
 
   if (numRows > 5 && numCols > 5) {
     initialState[0][0] = 1;
@@ -182,7 +184,10 @@ export function tick(currentState) {
   for (let i = 0; i < numRows; i++) {
     for (let j = 0; j < numCols; j++) {
       const neighbors = findNeighbors(i, j);
-      const alive = neighbors.reduce((sum, [ni, nj]) => sum + currentState[ni][nj], 0);
+      const alive = neighbors.reduce(
+        (sum, [ni, nj]) => sum + currentState[ni][nj],
+        0
+      );
       if (currentState[i][j]) {
         next[i][j] = survivalRules.includes(alive) ? 1 : 0;
       } else {
@@ -251,10 +256,15 @@ export function updateGameVars(updates) {
   if (updates.tickCount !== undefined) tickCount = updates.tickCount;
   if (updates.gameSpeed !== undefined) gameSpeed = updates.gameSpeed;
   if (updates.interval !== undefined) interval = updates.interval;
-  if (updates.survivalRules !== undefined) survivalRules = updates.survivalRules;
+  if (updates.survivalRules !== undefined)
+    survivalRules = updates.survivalRules;
   if (updates.birthRules !== undefined) birthRules = updates.birthRules;
-  if (updates.isInTutorialMode !== undefined) isInTutorialMode = updates.isInTutorialMode;
-  if (updates.isInPlacementMode !== undefined) isInPlacementMode = updates.isInPlacementMode;
-  if (updates.selectedPattern !== undefined) selectedPattern = updates.selectedPattern;
-  if (updates.selectedPatternType !== undefined) selectedPatternType = updates.selectedPatternType;
+  if (updates.isInTutorialMode !== undefined)
+    isInTutorialMode = updates.isInTutorialMode;
+  if (updates.isInPlacementMode !== undefined)
+    isInPlacementMode = updates.isInPlacementMode;
+  if (updates.selectedPattern !== undefined)
+    selectedPattern = updates.selectedPattern;
+  if (updates.selectedPatternType !== undefined)
+    selectedPatternType = updates.selectedPatternType;
 }

@@ -4,14 +4,14 @@
  */
 
 // Import all modules
-import * as GameCore from './gameCore.js';
-import * as Patterns from './patterns.js';
-import * as Statistics from './statistics.js';
-import * as Theme from './theme.js';
-import * as ExportImport from './exportImport.js';
-import * as PatternEditor from './patternEditor.js';
-import * as PatternFilter from './patternFilter.js';
-import * as Renderer from './renderer.js';
+import * as GameCore from "./gameCore.js";
+import * as Patterns from "./patterns.js";
+import * as Statistics from "./statistics.js";
+import * as Theme from "./theme.js";
+import * as ExportImport from "./exportImport.js";
+import * as PatternEditor from "./patternEditor.js";
+import * as PatternFilter from "./patternFilter.js";
+import * as Renderer from "./renderer.js";
 
 // Combine all patterns
 let allPatterns = {};
@@ -23,13 +23,13 @@ let customPatterns = [];
 function initializeGrid() {
   GameCore.calculateGridSize();
   GameCore.updateGameVars({
-    tutorialTicksRequired: Math.max(15, Math.floor(GameCore.numRows / 3))
+    tutorialTicksRequired: Math.max(15, Math.floor(GameCore.numRows / 3)),
   });
-  
+
   GameCore.initializeGrid();
   Renderer.draw(GameCore.state);
   updatePatternVisibility();
-  
+
   if (GameCore.isInTutorialMode) {
     Renderer.showTutorialMessage();
   }
@@ -41,11 +41,11 @@ function initializeGrid() {
 function updatePatternVisibility() {
   // Merge all patterns
   allPatterns = { ...Patterns.spaceshipPatterns };
-  
+
   customPatterns.forEach((pattern, index) => {
     allPatterns[`custom_${index}`] = pattern;
   });
-  
+
   PatternFilter.renderPatterns(allPatterns, handlePatternSelect);
 }
 
@@ -54,13 +54,13 @@ function updatePatternVisibility() {
  */
 function handlePatternSelect(key, pattern) {
   if (GameCore.isInTutorialMode) return;
-  
+
   GameCore.updateGameVars({
     isInPlacementMode: true,
     selectedPattern: pattern.grid,
-    selectedPatternType: pattern.name || key
+    selectedPatternType: pattern.name || key,
   });
-  
+
   document.getElementById("game").style.cursor = "crosshair";
   updateTickCounter();
 }
@@ -72,7 +72,7 @@ function exitPlacementMode() {
   GameCore.updateGameVars({
     isInPlacementMode: false,
     selectedPattern: null,
-    selectedPatternType: null
+    selectedPatternType: null,
   });
   document.getElementById("game").style.cursor = "default";
   updateTickCounter();
@@ -88,12 +88,13 @@ function updateTickCounter() {
   const tutorialText = GameCore.isInTutorialMode
     ? ` (Tutorial: ${ticksRemaining} ticks remaining)`
     : "";
-  
+
   if (GameCore.isInPlacementMode) {
     document.getElementById("tick-counter").textContent =
       `Click to place ${GameCore.selectedPatternType}. Press Escape to cancel.`;
   } else {
-    document.getElementById("tick-counter").textContent = `Tick: ${GameCore.tickCount}${tutorialText}`;
+    document.getElementById("tick-counter").textContent =
+      `Tick: ${GameCore.tickCount}${tutorialText}`;
   }
 }
 
@@ -102,27 +103,30 @@ function updateTickCounter() {
  */
 function start() {
   if (GameCore.interval) return;
-  
+
   const actualInterval = GameCore.baseInterval / GameCore.gameSpeed;
-  
+
   GameCore.updateGameVars({
     interval: setInterval(() => {
-      const oldState = GameCore.state.map(row => [...row]);
+      const oldState = GameCore.state.map((row) => [...row]);
       GameCore.updateGameVars({ state: GameCore.tick(GameCore.state) });
       Renderer.draw(GameCore.state);
-      
+
       GameCore.updateGameVars({ tickCount: GameCore.tickCount + 1 });
       updateTickCounter();
-      
+
       if (!GameCore.isInTutorialMode) {
         Statistics.updateStats(oldState, GameCore.state);
         Statistics.updateStatsDisplay();
       }
-      
-      if (GameCore.isInTutorialMode && GameCore.tickCount >= GameCore.tutorialTicksRequired) {
+
+      if (
+        GameCore.isInTutorialMode &&
+        GameCore.tickCount >= GameCore.tutorialTicksRequired
+      ) {
         endTutorial();
       }
-    }, actualInterval)
+    }, actualInterval),
   });
 }
 
@@ -141,10 +145,10 @@ function stop() {
  */
 function reset() {
   stop();
-  GameCore.updateGameVars({ 
+  GameCore.updateGameVars({
     tickCount: 0,
     isInTutorialMode: false,
-    state: GameCore.initialState.map(row => [...row])
+    state: GameCore.initialState.map((row) => [...row]),
   });
   Renderer.draw(GameCore.state);
   Renderer.hideTutorialMessage();
@@ -161,7 +165,9 @@ function clear() {
   GameCore.updateGameVars({
     tickCount: 0,
     isInTutorialMode: false,
-    state: Array.from({ length: GameCore.numRows }, () => Array(GameCore.numCols).fill(0))
+    state: Array.from({ length: GameCore.numRows }, () =>
+      Array(GameCore.numCols).fill(0)
+    ),
   });
   Renderer.draw(GameCore.state);
   Renderer.hideTutorialMessage();
@@ -179,8 +185,10 @@ function randomize() {
     tickCount: 0,
     isInTutorialMode: false,
     state: Array.from({ length: GameCore.numRows }, () =>
-      Array.from({ length: GameCore.numCols }, () => (Math.random() > 0.7 ? 1 : 0))
-    )
+      Array.from({ length: GameCore.numCols }, () =>
+        Math.random() > 0.7 ? 1 : 0
+      )
+    ),
   });
   Renderer.draw(GameCore.state);
   Renderer.hideTutorialMessage();
@@ -203,12 +211,12 @@ function endTutorial() {
  */
 function updateSpeed(newSpeed) {
   GameCore.updateGameVars({ gameSpeed: parseInt(newSpeed) });
-  
+
   if (GameCore.interval) {
     stop();
     start();
   }
-  
+
   const speedDisplay = document.getElementById("speed-display");
   if (speedDisplay) speedDisplay.textContent = `${newSpeed}x`;
 }
@@ -218,7 +226,7 @@ function updateSpeed(newSpeed) {
  */
 function handleCellClick(i, j) {
   if (GameCore.isInTutorialMode) return;
-  
+
   if (GameCore.isInPlacementMode && GameCore.selectedPattern) {
     if (GameCore.placePatternAt(GameCore.selectedPattern, i, j)) {
       Renderer.draw(GameCore.state);
@@ -227,7 +235,7 @@ function handleCellClick(i, j) {
       alert(`Cannot place pattern here. Try clicking closer to the top-left.`);
     }
   } else {
-    const newState = GameCore.state.map(row => [...row]);
+    const newState = GameCore.state.map((row) => [...row]);
     newState[i][j] = newState[i][j] ? 0 : 1;
     GameCore.updateGameVars({ state: newState });
     Renderer.draw(GameCore.state);
@@ -243,26 +251,31 @@ function setupControls() {
   document.getElementById("reset")?.addEventListener("click", reset);
   document.getElementById("clear")?.addEventListener("click", clear);
   document.getElementById("randomize")?.addEventListener("click", randomize);
-  
-  document.getElementById("speed-control")?.addEventListener("input", (e) => {
+  document.getElementById("toggle-fullscreen")?.addEventListener("click", toggleFullscreen);
+
+  document.getElementById("speed-slider")?.addEventListener("input", (e) => {
     updateSpeed(e.target.value);
   });
-  
+
   // Save/Load buttons
   for (let i = 1; i <= 5; i++) {
-    document.querySelector(`[data-save="${i}"]`)?.addEventListener("click", () => {
-      ExportImport.saveGameState(i, GameCore.state);
-    });
-    
-    document.querySelector(`[data-load="${i}"]`)?.addEventListener("click", () => {
-      const loadedState = ExportImport.loadGameState(i);
-      if (loadedState) {
-        GameCore.updateGameVars({ state: loadedState });
-        Renderer.draw(GameCore.state);
-      }
-    });
+    document
+      .querySelector(`[data-save="${i}"]`)
+      ?.addEventListener("click", () => {
+        ExportImport.saveGameState(i, GameCore.state);
+      });
+
+    document
+      .querySelector(`[data-load="${i}"]`)
+      ?.addEventListener("click", () => {
+        const loadedState = ExportImport.loadGameState(i);
+        if (loadedState) {
+          GameCore.updateGameVars({ state: loadedState });
+          Renderer.draw(GameCore.state);
+        }
+      });
   }
-  
+
   // Share URL
   document.getElementById("share-url")?.addEventListener("click", () => {
     const encoded = ExportImport.encodeStateToURL(GameCore.state);
@@ -271,7 +284,7 @@ function setupControls() {
       alert("URL copied to clipboard!");
     });
   });
-  
+
   // Escape key to cancel placement
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && GameCore.isInPlacementMode) {
@@ -286,13 +299,13 @@ function setupControls() {
 function loadPatternFromURL() {
   const params = new URLSearchParams(window.location.search);
   const encodedState = params.get("state");
-  
+
   if (encodedState) {
     const decoded = ExportImport.decodeStateFromURL(encodedState);
     if (decoded) {
       GameCore.updateGameVars({
         state: decoded,
-        isInTutorialMode: false
+        isInTutorialMode: false,
       });
       Renderer.draw(GameCore.state);
       Renderer.hideTutorialMessage();
@@ -308,7 +321,7 @@ function handlePatternSave(patternName) {
   customPatterns.push({
     name: patternName,
     grid: pattern,
-    category: "custom"
+    category: "custom",
   });
   Patterns.saveCustomPatterns(customPatterns);
   updatePatternVisibility();
@@ -322,7 +335,7 @@ function handlePatternPlace(pattern) {
   GameCore.updateGameVars({
     isInPlacementMode: true,
     selectedPattern: pattern,
-    selectedPatternType: "Custom Pattern"
+    selectedPatternType: "Custom Pattern",
   });
   document.getElementById("game").style.cursor = "crosshair";
 }
@@ -333,42 +346,42 @@ function handlePatternPlace(pattern) {
 function initialize() {
   // Load custom patterns
   customPatterns = Patterns.loadCustomPatterns();
-  
+
   // Initialize game
   initializeGrid();
-  
+
   // Setup theme
   Theme.initializeTheme();
   Theme.setupThemeListeners();
-  
+
   // Setup pattern filtering
   PatternFilter.setupFilterListeners(allPatterns, handlePatternSelect);
-  
+
   // Setup pattern editor
   PatternEditor.setupEditorListeners(handlePatternSave, handlePatternPlace);
-  
+
   // Setup export/import
   ExportImport.setupExportListeners(
     () => GameCore.state,
     () => Statistics.stats
   );
-  
+
   // Setup game controls
   setupControls();
-  
+
   // Load pattern from URL
   loadPatternFromURL();
-  
+
   // Initial statistics
   Statistics.updateStatsDisplay();
-  
+
   // Handle window resize
   window.addEventListener("resize", () => {
     if (!GameCore.isInTutorialMode && !GameCore.interval) {
       initializeGrid();
     }
   });
-  
+
   // Setup cell click handler
   document.getElementById("game")?.addEventListener("click", (e) => {
     const cell = e.target.closest(".cell");
@@ -378,6 +391,87 @@ function initialize() {
       handleCellClick(row, col);
     }
   });
+
+  // Setup collapsible sections
+  setupCollapsibleSections();
+
+  // Setup mobile controls
+  setupMobileControls();
+}
+
+/**
+ * Setup collapsible sections
+ */
+function setupCollapsibleSections() {
+  const collapseToggles = document.querySelectorAll('.collapse-toggle');
+  
+  collapseToggles.forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+      const contentId = toggle.getAttribute('aria-controls');
+      const content = document.getElementById(contentId);
+      
+      if (content) {
+        toggle.setAttribute('aria-expanded', !isExpanded);
+        content.classList.toggle('collapsed');
+      }
+    });
+  });
+}
+
+/**
+ * Setup mobile-specific controls
+ */
+function setupMobileControls() {
+  // Mobile start button
+  document.getElementById('mobile-start')?.addEventListener('click', start);
+  document.getElementById('mobile-stop')?.addEventListener('click', stop);
+  document.getElementById('mobile-reset')?.addEventListener('click', reset);
+  document.getElementById('mobile-clear')?.addEventListener('click', clear);
+  document.getElementById('mobile-randomize')?.addEventListener('click', randomize);
+  document.getElementById('mobile-fullscreen')?.addEventListener('click', toggleFullscreen);
+  
+  // Mobile rules toggle
+  const toggleRules = document.getElementById('toggle-rules');
+  const rulesSection = document.querySelector('.game-rules');
+  const historySection = document.querySelector('.game-history');
+  
+  if (toggleRules && rulesSection && historySection) {
+    toggleRules.addEventListener('click', () => {
+      const isExpanded = toggleRules.getAttribute('aria-expanded') === 'true';
+      
+      if (isExpanded) {
+        rulesSection.style.display = 'none';
+        historySection.style.display = 'none';
+        toggleRules.setAttribute('aria-expanded', 'false');
+      } else {
+        rulesSection.style.display = 'block';
+        historySection.style.display = 'block';
+        toggleRules.setAttribute('aria-expanded', 'true');
+      }
+    });
+    
+    // Start with sections hidden on mobile
+    if (window.innerWidth <= 768) {
+      rulesSection.style.display = 'none';
+      historySection.style.display = 'none';
+      toggleRules.setAttribute('aria-expanded', 'false');
+    }
+  }
+}
+
+/**
+ * Toggle fullscreen mode
+ */
+function toggleFullscreen() {
+  // Implementation for fullscreen toggle
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
 }
 
 // Start the application when DOM is ready

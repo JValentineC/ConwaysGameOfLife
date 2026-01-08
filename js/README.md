@@ -50,13 +50,14 @@ The modules are automatically loaded via the `<script type="module">` tag in ind
 All module imports use relative paths with the `.js` extension:
 
 ```javascript
-import * as GameCore from './gameCore.js';
-import * as Patterns from './patterns.js';
+import * as GameCore from "./gameCore.js";
+import * as Patterns from "./patterns.js";
 ```
 
 ## Browser Compatibility
 
 ES6 modules are supported in all modern browsers:
+
 - Chrome 61+
 - Firefox 60+
 - Safari 10.1+
@@ -69,6 +70,7 @@ The original monolithic implementation (1907 lines) is backed up as `game.js.bac
 ## Migration Notes
 
 The refactoring maintains 100% feature parity with the original implementation while improving:
+
 - Code organization (8 focused modules vs 1 large file)
 - Developer experience (easier to navigate and understand)
 - Future extensibility (simpler to add new features)

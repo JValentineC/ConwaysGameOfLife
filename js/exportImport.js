@@ -64,7 +64,9 @@ export function exportAsRLE(currentState) {
  * @returns {string} Plain text representation
  */
 export function exportAsPlaintext(currentState) {
-  return currentState.map((row) => row.map((cell) => (cell ? "O" : ".")).join("")).join("\n");
+  return currentState
+    .map((row) => row.map((cell) => (cell ? "O" : ".")).join(""))
+    .join("\n");
 }
 
 /**

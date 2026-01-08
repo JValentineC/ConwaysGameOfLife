@@ -10,7 +10,9 @@ let editorSize = 10;
  */
 export function initializeEditor() {
   editorSize = 10;
-  editorGrid = Array.from({ length: editorSize }, () => Array(editorSize).fill(0));
+  editorGrid = Array.from({ length: editorSize }, () =>
+    Array(editorSize).fill(0)
+  );
   renderEditorGrid();
 }
 
@@ -59,7 +61,9 @@ function toggleEditorCell(row, col) {
 export function updateEditorSize(newSize) {
   editorSize = parseInt(newSize);
   const oldGrid = editorGrid;
-  editorGrid = Array.from({ length: editorSize }, () => Array(editorSize).fill(0));
+  editorGrid = Array.from({ length: editorSize }, () =>
+    Array(editorSize).fill(0)
+  );
 
   // Copy old grid data if possible
   for (let i = 0; i < Math.min(oldGrid.length, editorSize); i++) {
@@ -75,7 +79,9 @@ export function updateEditorSize(newSize) {
  * Clear the editor grid
  */
 export function clearEditor() {
-  editorGrid = Array.from({ length: editorSize }, () => Array(editorSize).fill(0));
+  editorGrid = Array.from({ length: editorSize }, () =>
+    Array(editorSize).fill(0)
+  );
   renderEditorGrid();
 }
 

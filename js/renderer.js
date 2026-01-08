@@ -8,7 +8,11 @@
  * @param {boolean} isPlacementMode - Whether in placement mode
  * @param {Array|null} selectedPattern - Selected pattern
  */
-export function draw(currentState, isPlacementMode = false, selectedPattern = null) {
+export function draw(
+  currentState,
+  isPlacementMode = false,
+  selectedPattern = null
+) {
   const game = document.getElementById("game");
   if (!game) return;
 

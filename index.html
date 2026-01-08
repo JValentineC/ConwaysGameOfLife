@@ -1,9 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Game of Life</title>
+    <title
+      >Conway's Game of Life - Interactive Cellular Automaton Simulator</title
+    >
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="Experience Conway's Game of Life - an interactive cellular automaton simulator. Create patterns, watch evolution, and explore spaceships, oscillators, and more. Free online tool for learning and experimenting."
+    />
+    <meta
+      name="keywords"
+      content="Conway's Game of Life, cellular automaton, game of life, simulation, patterns, glider, spaceship, oscillator, still life, John Conway"
+    />
+    <meta name="author" content="Game of Life Interactive" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Social Media Tags -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Conway's Game of Life - Interactive Simulator"
+    />
+    <meta
+      property="og:description"
+      content="Explore cellular automaton patterns with our interactive Conway's Game of Life simulator. Create and watch patterns evolve in real-time."
+    />
+    <meta
+      property="og:url"
+      content="https://github.com/JValentineC/ConwaysGameOfLife"
+    />
+    <meta property="og:site_name" content="Conway's Game of Life" />
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Conway's Game of Life - Interactive Simulator"
+    />
+    <meta
+      name="twitter:description"
+      content="Explore cellular automaton patterns with our interactive Conway's Game of Life simulator."
+    />
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#000000" />
+
     <link rel="stylesheet" href="styles.css" />
     <link
       href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css"
@@ -12,25 +57,46 @@
     />
   </head>
   <body>
-    <h1 class="title">Game of Life</h1>
-    
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <h1 class="title" role="banner">Conway's Game of Life</h1>
+
     <!-- Mobile Controls -->
-    <div class="mobile-controls">
+    <div
+      class="mobile-controls"
+      role="region"
+      aria-label="Mobile game controls"
+    >
       <div class="mobile-game-controls">
-        <button id="mobile-start">Start</button>
-        <button id="mobile-stop">Stop</button>
-        <button id="mobile-reset">Reset</button>
-        <button id="mobile-fullscreen">Fullscreen</button>
+        <button id="mobile-start" aria-label="Start simulation">Start</button>
+        <button id="mobile-stop" aria-label="Stop simulation">Stop</button>
+        <button id="mobile-reset" aria-label="Reset grid">Reset</button>
+        <button id="mobile-fullscreen" aria-label="Toggle fullscreen mode"
+          >Fullscreen</button
+        >
       </div>
-      
-      <div class="mobile-pattern-selector">
+
+      <div
+        class="mobile-pattern-selector"
+        role="region"
+        aria-label="Pattern selection"
+      >
         <label for="pattern-dropdown">Add Pattern:</label>
-        <select id="pattern-dropdown">
+        <select
+          id="pattern-dropdown"
+          aria-label="Select a pattern to add to the grid"
+        >
           <option value="">Select a pattern...</option>
         </select>
-        <button id="view-pattern" disabled>View Pattern</button>
+        <button
+          id="view-pattern"
+          disabled
+          aria-label="View selected pattern preview"
+          >View Pattern</button
+        >
       </div>
-      
+
       <div class="mobile-rules-toggle">
         <button id="toggle-rules">Rules & Settings</button>
       </div>
@@ -49,9 +115,13 @@
         </div>
       </div>
     </div>
-    
-    <div class="main-layout">
-      <div class="game-rules">
+
+    <main id="main-content" class="main-layout">
+      <aside
+        class="game-rules"
+        role="complementary"
+        aria-label="Game rules and customization"
+      >
         <h2>Rules</h2>
         <div class="rules-customization">
           <h3>Customize Rules</h3>
@@ -64,8 +134,9 @@
               id="survival-rules"
               value="2,3"
               placeholder="e.g., 2,3"
+              aria-describedby="survival-help"
             />
-            <small>Comma-separated neighbor counts</small>
+            <small id="survival-help">Comma-separated neighbor counts</small>
           </div>
           <div class="rule-input">
             <label for="birth-rules"
@@ -76,10 +147,13 @@
               id="birth-rules"
               value="3"
               placeholder="e.g., 3"
+              aria-describedby="birth-help"
             />
-            <small>Comma-separated neighbor counts</small>
+            <small id="birth-help">Comma-separated neighbor counts</small>
           </div>
-          <button id="apply-rules">Apply Rules</button>
+          <button id="apply-rules" aria-label="Apply custom rules to simulation"
+            >Apply Rules</button
+          >
         </div>
         <h3>Current Rules</h3>
         <ul id="current-rules">
@@ -100,20 +174,60 @@
             cell (reproduction).</li
           >
         </ul>
-      </div>
-      <div class="game-center">
-        <span id="tick-counter">Tick: 0</span>
-        <div class="container">
-          <div id="game"></div>
-          <div>
-            <button id="start">Start</button>
-            <button id="stop">Stop</button>
-            <button id="reset">Reset</button>
-            <button id="toggle-fullscreen">Fullscreen</button>
+      </aside>
+      <section class="game-center" role="main" aria-label="Game simulation">
+        <div class="game-status-bar">
+          <span id="tick-counter" aria-live="polite">Tick: 0</span>
+          <div class="speed-control">
+            <label for="speed-slider">Speed:</label>
+            <input
+              type="range"
+              id="speed-slider"
+              min="1"
+              max="10"
+              value="5"
+              aria-label="Simulation speed control"
+              aria-valuemin="1"
+              aria-valuemax="10"
+              aria-valuenow="5"
+            />
+            <span id="speed-value" aria-live="polite">5x</span>
           </div>
         </div>
-      </div>
-      <div class="game-history">
+        <div class="container">
+          <div id="game" role="grid" aria-label="Game of Life grid"></div>
+          <div class="control-buttons" role="group" aria-label="Game controls">
+            <button id="start" aria-label="Start simulation">Start</button>
+            <button id="stop" aria-label="Stop simulation">Stop</button>
+            <button id="reset" aria-label="Reset grid to initial state"
+              >Reset</button
+            >
+            <button id="toggle-fullscreen" aria-label="Toggle fullscreen mode"
+              >Fullscreen</button
+            >
+          </div>
+          <div
+            class="save-load-controls"
+            role="group"
+            aria-label="Save and load controls"
+          >
+            <button id="save-state" aria-label="Save current grid state"
+              >💾 Save State</button
+            >
+            <button id="load-state" aria-label="Load saved grid state" disabled
+              >📂 Load State</button
+            >
+            <button id="clear-saved" aria-label="Clear saved states" disabled
+              >🗑️ Clear Saved</button
+            >
+          </div>
+        </div>
+      </section>
+      <aside
+        class="game-history"
+        role="complementary"
+        aria-label="History and information"
+      >
         <h2>History</h2>
         <p>
           The Game of Life, devised by mathematician John Horton Conway in 1970,
@@ -124,157 +238,164 @@
           simple rules, and it has inspired research in mathematics, computer
           science, and artificial life.
         </p>
-        </div>
+      </aside>
+    </main>
+
+    <p class="click-instruction" role="note"
+      >Click any pattern to add it to the game!</p
+    >
+
+    <section
+      class="spaceship-patterns"
+      role="region"
+      aria-label="Available patterns"
+    >
+      <!-- Spaceships Category -->
+      <div class="pattern-category-header spaceships-header">
+        <h3>🚀 Spaceships</h3>
+        <p>Moving patterns that travel across the grid</p>
       </div>
-      
-      <p class="click-instruction">Click any pattern to add it to the game!</p>
-      
-      <div class="spaceship-patterns">
-        <!-- Spaceships Category -->
-        <div class="pattern-category-header spaceships-header">
-          <h3>🚀 Spaceships</h3>
-          <p>Moving patterns that travel across the grid</p>
-        </div>
-       
-          <div class="ship-display clickable" data-ship="glider">
-            <h4>Glider</h4>
-            <div class="ship-pattern glider-pattern"></div>
-            <p>The smallest spaceship, moves diagonally every 4 generations.</p>
-          </div>
 
-          <div class="ship-display clickable" data-ship="lwss">
-            <h4>Lightweight Spaceship (LWSS)</h4>
-            <div class="ship-pattern lwss-pattern"></div>
-            <p>Travels horizontally, period 4.</p>
-          </div>
-
-          <div class="ship-display clickable" data-ship="mwss">
-            <h4>Middleweight Spaceship (MWSS)</h4>
-            <div class="ship-pattern mwss-pattern"></div>
-            <p>Larger horizontal traveler, period 4.</p>
-          </div>
-
-          <div class="ship-display clickable" data-ship="hwss">
-            <h4>Heavyweight Spaceship (HWSS)</h4>
-            <div class="ship-pattern hwss-pattern"></div>
-            <p>Heavyweight horizontal traveler, period 4.</p>
-          </div>
-
-          <div class="ship-display clickable" data-ship="copperhead">
-            <h4>Copperhead</h4>
-            <div class="ship-pattern copperhead-pattern"></div>
-            <p>Stable diagonal-moving spaceship.</p>
-          </div>
-
-          <div class="ship-display clickable" data-ship="pufferfish">
-            <h4>Pufferfish</h4>
-            <div class="ship-pattern pufferfish-pattern"></div>
-            <p>Orthogonal spaceship that leaves a trail of debris behind.</p>
-          </div>
-
-          <div class="ship-display clickable" data-ship="Weekender">
-            <h4>Weekender</h4>
-            <div class="ship-pattern weekender-pattern"></div>
-            <p>Orthogonal spaceship, travels horizontally every 5 generations.</p>
-          </div>
-
-        <!-- Oscillators Category -->
-        <div class="pattern-category-header oscillators-header">
-          <h3>🔄 Oscillators</h3>
-          <p>Patterns that repeat their states in cycles</p>
-        </div>
-
-          <div class="ship-display clickable" data-ship="pulsar">
-            <h4>Pulsar</h4>
-            <div class="ship-pattern pulsar-pattern"></div>
-            <p>Period 3 oscillator, very stable.</p>
-          </div>
-
-          <div class="ship-display clickable" data-ship="beacon">
-            <h4>Beacon</h4>
-            <div class="ship-pattern beacon-pattern"></div>
-            <p>Period 2 oscillator.</p>
-          </div>
-
-          <div class="ship-display clickable" data-ship="blinker">
-            <h4>Blinker</h4>
-            <div class="ship-pattern blinker-pattern"></div>
-            <p>Period 2 oscillator - simplest oscillator.</p>
-          </div>
-
-          <div class="ship-display clickable" data-ship="toad">
-            <h4>Toad</h4>
-            <div class="ship-pattern toad-pattern"></div>
-            <p>Period 2 oscillator that switches between horizontal and vertical.</p>
-          </div>
-
-          <div class="ship-display clickable" data-ship="Galaxy">
-            <h4>Galaxy</h4>
-            <div class="ship-pattern galaxy-pattern"></div>
-            <p>Period 8 oscillator with rotating symmetric pattern.</p>
-          </div>
-
-        <!-- Still Lifes Category -->
-        <div class="pattern-category-header stilllifes-header">
-          <h3>🔸 Still Lifes</h3>
-          <p>Stable patterns that never change</p>
-        </div>
-
-          <div class="ship-display clickable" data-ship="block">
-            <h4>Block</h4>
-            <div class="ship-pattern block-pattern"></div>
-            <p>Simplest still life pattern.</p>
-          </div>
-
-          <div class="ship-display clickable" data-ship="beehive">
-            <h4>Beehive</h4>
-            <div class="ship-pattern beehive-pattern"></div>
-            <p>Common still life pattern.</p>
-          </div>
-
-          <div class="ship-display clickable" data-ship="loaf">
-            <h4>Loaf</h4>
-            <div class="ship-pattern loaf-pattern"></div>
-            <p>Still life with an asymmetric shape.</p>
-          </div>
-
-          <div class="ship-display clickable" data-ship="boat">
-            <h4>Boat</h4>
-            <div class="ship-pattern boat-pattern"></div>
-            <p>Small still life pattern.</p>
-          </div>
-
-        <!-- Generators Category -->
-        <div class="pattern-category-header generators-header">
-          <h3>⚡ Generators</h3>
-          <p>Patterns that create other patterns</p>
-        </div>
-
-          <div class="ship-display clickable" data-ship="glidergun">
-            <h4>Glider Gun</h4>
-            <div class="ship-pattern glidergun-pattern"></div>
-            <p>Produces gliders infinitely (large pattern).</p>
-          </div>
-
-        <!-- Methuselahs Category -->
-        <div class="pattern-category-header methuselahs-header">
-          <h3>🧬 Methuselahs</h3>
-          <p>Long-lived patterns with interesting evolution</p>
-        </div>
-
-          <div class="ship-display clickable" data-ship="acorn">
-            <h4>Acorn</h4>
-            <div class="ship-pattern acorn-pattern"></div>
-            <p>Takes 5206 generations to stabilize!</p>
-          </div>
-
-          <div class="ship-display clickable" data-ship="diehard">
-            <h4>Diehard</h4>
-            <div class="ship-pattern diehard-pattern"></div>
-            <p>Dies completely after 130 generations.</p>
-          </div>
+      <div class="ship-display clickable" data-ship="glider">
+        <h4>Glider</h4>
+        <div class="ship-pattern glider-pattern"></div>
+        <p>The smallest spaceship, moves diagonally every 4 generations.</p>
       </div>
-    </div>
+
+      <div class="ship-display clickable" data-ship="lwss">
+        <h4>Lightweight Spaceship (LWSS)</h4>
+        <div class="ship-pattern lwss-pattern"></div>
+        <p>Travels horizontally, period 4.</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="mwss">
+        <h4>Middleweight Spaceship (MWSS)</h4>
+        <div class="ship-pattern mwss-pattern"></div>
+        <p>Larger horizontal traveler, period 4.</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="hwss">
+        <h4>Heavyweight Spaceship (HWSS)</h4>
+        <div class="ship-pattern hwss-pattern"></div>
+        <p>Heavyweight horizontal traveler, period 4.</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="copperhead">
+        <h4>Copperhead</h4>
+        <div class="ship-pattern copperhead-pattern"></div>
+        <p>Stable diagonal-moving spaceship.</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="pufferfish">
+        <h4>Pufferfish</h4>
+        <div class="ship-pattern pufferfish-pattern"></div>
+        <p>Orthogonal spaceship that leaves a trail of debris behind.</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="Weekender">
+        <h4>Weekender</h4>
+        <div class="ship-pattern weekender-pattern"></div>
+        <p>Orthogonal spaceship, travels horizontally every 5 generations.</p>
+      </div>
+
+      <!-- Oscillators Category -->
+      <div class="pattern-category-header oscillators-header">
+        <h3>🔄 Oscillators</h3>
+        <p>Patterns that repeat their states in cycles</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="pulsar">
+        <h4>Pulsar</h4>
+        <div class="ship-pattern pulsar-pattern"></div>
+        <p>Period 3 oscillator, very stable.</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="beacon">
+        <h4>Beacon</h4>
+        <div class="ship-pattern beacon-pattern"></div>
+        <p>Period 2 oscillator.</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="blinker">
+        <h4>Blinker</h4>
+        <div class="ship-pattern blinker-pattern"></div>
+        <p>Period 2 oscillator - simplest oscillator.</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="toad">
+        <h4>Toad</h4>
+        <div class="ship-pattern toad-pattern"></div>
+        <p
+          >Period 2 oscillator that switches between horizontal and vertical.</p
+        >
+      </div>
+
+      <div class="ship-display clickable" data-ship="Galaxy">
+        <h4>Galaxy</h4>
+        <div class="ship-pattern galaxy-pattern"></div>
+        <p>Period 8 oscillator with rotating symmetric pattern.</p>
+      </div>
+
+      <!-- Still Lifes Category -->
+      <div class="pattern-category-header stilllifes-header">
+        <h3>🔸 Still Lifes</h3>
+        <p>Stable patterns that never change</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="block">
+        <h4>Block</h4>
+        <div class="ship-pattern block-pattern"></div>
+        <p>Simplest still life pattern.</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="beehive">
+        <h4>Beehive</h4>
+        <div class="ship-pattern beehive-pattern"></div>
+        <p>Common still life pattern.</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="loaf">
+        <h4>Loaf</h4>
+        <div class="ship-pattern loaf-pattern"></div>
+        <p>Still life with an asymmetric shape.</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="boat">
+        <h4>Boat</h4>
+        <div class="ship-pattern boat-pattern"></div>
+        <p>Small still life pattern.</p>
+      </div>
+
+      <!-- Generators Category -->
+      <div class="pattern-category-header generators-header">
+        <h3>⚡ Generators</h3>
+        <p>Patterns that create other patterns</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="glidergun">
+        <h4>Glider Gun</h4>
+        <div class="ship-pattern glidergun-pattern"></div>
+        <p>Produces gliders infinitely (large pattern).</p>
+      </div>
+
+      <!-- Methuselahs Category -->
+      <div class="pattern-category-header methuselahs-header">
+        <h3>🧬 Methuselahs</h3>
+        <p>Long-lived patterns with interesting evolution</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="acorn">
+        <h4>Acorn</h4>
+        <div class="ship-pattern acorn-pattern"></div>
+        <p>Takes 5206 generations to stabilize!</p>
+      </div>
+
+      <div class="ship-display clickable" data-ship="diehard">
+        <h4>Diehard</h4>
+        <div class="ship-pattern diehard-pattern"></div>
+        <p>Dies completely after 130 generations.</p>
+      </div>
+    </section>
 
     <!-- Modal dialogs -->
     <dialog id="welcome_modal" class="modal">

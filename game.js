@@ -121,6 +121,8 @@ let state = [];
 
 let interval = null;
 let tickCount = 0;
+let gameSpeed = 5; // Speed multiplier (1-10)
+let baseInterval = 500; // Base interval in milliseconds
 
 // Tutorial mode variables
 let isInTutorialMode = true;
@@ -138,6 +140,10 @@ let normalGridSize = { rows: 40, cols: 40 };
 // Game rules - default Conway's Game of Life
 let survivalRules = [2, 3]; // Live cell survives with these neighbor counts
 let birthRules = [3]; // Dead cell becomes alive with these neighbor counts
+
+// Save/Load state management
+const SAVE_KEY = "gameOfLifeSavedStates";
+const MAX_SAVES = 5;
 
 // Famous Game of Life patterns - spaceships, oscillators, and still lifes
 const spaceshipPatterns = {
@@ -470,9 +476,8 @@ function enterPlacementMode(shipType) {
 
   // Show pattern dimensions and placement instructions
   const patternSize = `${pattern.length}x${pattern[0].length}`;
-  document.getElementById(
-    "tick-counter"
-  ).textContent = `Click on the grid to place ${shipType} (${patternSize}). Grid size: ${numRows}x${numCols}. Press Escape to cancel.`;
+  document.getElementById("tick-counter").textContent =
+    `Click on the grid to place ${shipType} (${patternSize}). Grid size: ${numRows}x${numCols}. Press Escape to cancel.`;
 
   console.log(
     `Entering placement mode for ${shipType}. Pattern size: ${patternSize}, Grid size: ${numRows}x${numCols}`
@@ -570,9 +575,12 @@ function disableControls() {
     "apply-rules",
     "survival-rules",
     "birth-rules",
+    "speed-slider",
+    "save-state",
   ];
   controlIds.forEach((id) => {
-    document.getElementById(id).disabled = true;
+    const element = document.getElementById(id);
+    if (element) element.disabled = true;
   });
 
   const fullscreenBtn = document.getElementById("toggle-fullscreen");
@@ -581,7 +589,8 @@ function disableControls() {
   // Disable mobile controls during tutorial
   const mobileControlIds = ["mobile-start", "mobile-stop", "mobile-reset"];
   mobileControlIds.forEach((id) => {
-    document.getElementById(id).disabled = true;
+    const element = document.getElementById(id);
+    if (element) element.disabled = true;
   });
 
   const mobileFullscreenBtn = document.getElementById("mobile-fullscreen");
@@ -601,6 +610,9 @@ function disableControls() {
     patternDropdown.disabled = true;
     viewPatternButton.disabled = true;
   }
+
+  // Disable save/load during tutorial
+  updateSaveLoadButtons();
 }
 
 function enableControls() {
@@ -612,9 +624,12 @@ function enableControls() {
     "apply-rules",
     "survival-rules",
     "birth-rules",
+    "speed-slider",
+    "save-state",
   ];
   controlIds.forEach((id) => {
-    document.getElementById(id).disabled = false;
+    const element = document.getElementById(id);
+    if (element) element.disabled = false;
   });
 
   const fullscreenBtn = document.getElementById("toggle-fullscreen");
@@ -623,7 +638,8 @@ function enableControls() {
   // Enable mobile controls
   const mobileControlIds = ["mobile-start", "mobile-stop", "mobile-reset"];
   mobileControlIds.forEach((id) => {
-    document.getElementById(id).disabled = false;
+    const element = document.getElementById(id);
+    if (element) element.disabled = false;
   });
 
   const mobileFullscreenBtn = document.getElementById("mobile-fullscreen");
@@ -648,6 +664,9 @@ function enableControls() {
 
   // Update pattern visibility based on current grid size
   updatePatternVisibility();
+
+  // Enable save/load buttons
+  updateSaveLoadButtons();
 }
 
 function updateRulesDisplay() {
@@ -702,6 +721,10 @@ function start() {
 
   updateTickCounter();
   let prevState = state.map((row) => [...row]);
+
+  // Calculate interval based on speed
+  const intervalTime = baseInterval / gameSpeed;
+
   interval = setInterval(() => {
     state = tick(state);
     tickCount++;
@@ -740,7 +763,7 @@ function start() {
       document.getElementById("pattern_stable_modal").showModal();
     }
     prevState = state.map((row) => [...row]);
-  }, 500);
+  }, intervalTime);
 }
 
 function stop() {
@@ -1167,6 +1190,143 @@ function toggleMobileRules() {
   }
 }
 
+// Speed control functions
+function updateSpeed(newSpeed) {
+  gameSpeed = parseInt(newSpeed);
+  document.getElementById("speed-value").textContent = `${gameSpeed}x`;
+
+  // Update ARIA value
+  const slider = document.getElementById("speed-slider");
+  if (slider) {
+    slider.setAttribute("aria-valuenow", gameSpeed);
+  }
+
+  // If game is running, restart with new speed
+  if (interval) {
+    const wasRunning = true;
+    stop();
+    if (wasRunning) {
+      start();
+    }
+  }
+}
+
+// Save/Load state functions
+function saveCurrentState() {
+  if (isInTutorialMode) return;
+
+  const savedStates = getSavedStates();
+  const timestamp = new Date().toISOString();
+  const stateName = `Save ${savedStates.length + 1} - ${new Date().toLocaleString()}`;
+
+  const saveData = {
+    id: Date.now(),
+    name: stateName,
+    timestamp: timestamp,
+    state: state,
+    rows: numRows,
+    cols: numCols,
+    tickCount: tickCount,
+    survivalRules: survivalRules,
+    birthRules: birthRules,
+  };
+
+  savedStates.push(saveData);
+
+  // Keep only the last MAX_SAVES
+  if (savedStates.length > MAX_SAVES) {
+    savedStates.shift();
+  }
+
+  localStorage.setItem(SAVE_KEY, JSON.stringify(savedStates));
+  updateSaveLoadButtons();
+  alert(
+    `State saved successfully! (${savedStates.length}/${MAX_SAVES} slots used)`
+  );
+}
+
+function loadSavedState() {
+  if (isInTutorialMode) return;
+
+  const savedStates = getSavedStates();
+  if (savedStates.length === 0) {
+    alert("No saved states available.");
+    return;
+  }
+
+  // Show selection dialog
+  const stateList = savedStates
+    .map((save, index) => `${index + 1}. ${save.name}`)
+    .join("\n");
+
+  const selection = prompt(
+    `Select a state to load (1-${savedStates.length}):\n\n${stateList}`
+  );
+
+  if (selection === null) return; // User cancelled
+
+  const index = parseInt(selection) - 1;
+  if (isNaN(index) || index < 0 || index >= savedStates.length) {
+    alert("Invalid selection.");
+    return;
+  }
+
+  const saveData = savedStates[index];
+
+  // Stop game if running
+  stop();
+
+  // Restore state
+  numRows = saveData.rows;
+  numCols = saveData.cols;
+  state = saveData.state.map((row) => [...row]);
+  tickCount = saveData.tickCount;
+  survivalRules = saveData.survivalRules;
+  birthRules = saveData.birthRules;
+
+  // Update UI
+  document.getElementById("survival-rules").value = survivalRules.join(",");
+  document.getElementById("birth-rules").value = birthRules.join(",");
+  updateRulesDisplay();
+  updateTickCounter();
+  draw(state);
+
+  alert(`State loaded: ${saveData.name}`);
+}
+
+function getSavedStates() {
+  const saved = localStorage.getItem(SAVE_KEY);
+  return saved ? JSON.parse(saved) : [];
+}
+
+function clearSavedStates() {
+  if (isInTutorialMode) return;
+
+  if (
+    confirm(
+      "Are you sure you want to delete all saved states? This cannot be undone."
+    )
+  ) {
+    localStorage.removeItem(SAVE_KEY);
+    updateSaveLoadButtons();
+    alert("All saved states cleared.");
+  }
+}
+
+function updateSaveLoadButtons() {
+  const savedStates = getSavedStates();
+  const loadButton = document.getElementById("load-state");
+  const clearButton = document.getElementById("clear-saved");
+
+  if (loadButton) {
+    loadButton.disabled = savedStates.length === 0 || isInTutorialMode;
+  }
+
+  if (clearButton) {
+    clearButton.disabled = savedStates.length === 0 || isInTutorialMode;
+  }
+}
+
 // Initialize - start tutorial automatically
 initializeGrid(); // Initialize grid based on screen size
 draw(state);
@@ -1181,6 +1341,25 @@ document.getElementById("welcome_modal").showModal();
 setTimeout(() => {
   start();
 }, 2000); // Give user time to read the welcome message
+
+// Setup speed control listener
+document.getElementById("speed-slider")?.addEventListener("input", (e) => {
+  updateSpeed(e.target.value);
+});
+
+// Setup save/load listeners
+document
+  .getElementById("save-state")
+  ?.addEventListener("click", saveCurrentState);
+document
+  .getElementById("load-state")
+  ?.addEventListener("click", loadSavedState);
+document
+  .getElementById("clear-saved")
+  ?.addEventListener("click", clearSavedStates);
+
+// Initialize save/load button states
+updateSaveLoadButtons();
 
 // Handle window resize to recalculate grid
 window.addEventListener("resize", () => {

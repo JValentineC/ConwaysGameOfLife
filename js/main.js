@@ -447,20 +447,20 @@ function setupMobileControls() {
       const isExpanded = toggleRules.getAttribute("aria-expanded") === "true";
 
       if (isExpanded) {
-        rulesSection.style.display = "none";
-        historySection.style.display = "none";
+        rulesSection.classList.remove("mobile-expanded");
+        historySection.classList.remove("mobile-expanded");
         toggleRules.setAttribute("aria-expanded", "false");
       } else {
-        rulesSection.style.display = "block";
-        historySection.style.display = "block";
+        rulesSection.classList.add("mobile-expanded");
+        historySection.classList.add("mobile-expanded");
         toggleRules.setAttribute("aria-expanded", "true");
       }
     });
 
     // Start with sections hidden on mobile
     if (window.innerWidth <= 768) {
-      rulesSection.style.display = "none";
-      historySection.style.display = "none";
+      rulesSection.classList.remove("mobile-expanded");
+      historySection.classList.remove("mobile-expanded");
       toggleRules.setAttribute("aria-expanded", "false");
     }
   }

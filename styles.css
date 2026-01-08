@@ -1463,6 +1463,18 @@ body.light-theme .pattern-category-header {
   }
 }
 
+/* Desktop: Always show sidebars */
+@media (min-width: 769px) {
+  .game-rules,
+  .game-history {
+    display: block !important;
+    position: relative !important;
+    left: auto !important;
+    width: auto !important;
+    height: auto !important;
+  }
+}
+
 @media (max-width: 768px) {
   /* Show mobile controls on tablets and phones */
   .mobile-controls {
@@ -1495,11 +1507,14 @@ body.light-theme .pattern-category-header {
   }
 
   /* FORCE HIDE sidebars on mobile - they take up too much space */
-  .game-rules,
-  .game-history {
+  .game-rules:not(.mobile-expanded),
+  .game-history:not(.mobile-expanded) {
     display: none !important;
-    position: absolute;
-    left: -9999px;
+    position: absolute !important;
+    left: -9999px !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
   }
 
   /* When expanded, show as full-width sections BELOW the game */
@@ -1508,12 +1523,14 @@ body.light-theme .pattern-category-header {
     display: block !important;
     position: relative !important;
     left: auto !important;
-    order: 3;
-    width: 100%;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
     max-width: 100%;
     margin: 20px 0;
     padding: 15px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 215, 0, 0.3);
     border-radius: 8px;
   }
 
